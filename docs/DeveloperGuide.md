@@ -362,6 +362,7 @@ commands or data fields) without requiring major restructuring of existing compo
 
 ### Glossary
 
+* **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Tag**: A label that can be assigned to a contact to categorise them.
 * **ID**: The currently displayed list number of the specific contact.
 * **Case ID**: A Case ID is a unique identifier assigned to a specific client 
