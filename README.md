@@ -17,7 +17,7 @@
 
 Social workers like **Alice** (a community social service officer) often handle high volumes of low-income households and elderly clients. CareSync addresses these specific needs by providing:
 
-* **Targeted Organization:** Categorize contacts by roles such as `Client`, `Caregiver`, `MSF Agency`, or `Hospital`.
+* **Targeted Organization:** Categorize contacts by roles such as `Client`, `Caregiver`, `Government Organisation`, or `Hospital`.
 * **Visit Tracking:** Quick access to visit history and scheduling without needing an external calendar.
 * **Efficient Workflows:** Optimized for users with fast typing speeds, supports bulk operations (e.g., tagging multiple contacts at once), and provides a "Today View" to facilitate handling daily tasks.
 
