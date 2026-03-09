@@ -24,6 +24,7 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final VisitDateTime visitDateTime;
 
     /**
      * Every field must be present and not null.
@@ -35,6 +36,20 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.visitDateTime = new VisitDateTime(); // Empty by default
+    }
+
+    /**
+     * Constructor with optional visitDateTime field.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, VisitDateTime visitDateTime) {
+        requireAllNonNull(name, phone, email, address, tags, visitDateTime);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.visitDateTime = visitDateTime;
     }
 
     public Name getName() {
@@ -51,6 +66,10 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public VisitDateTime getVisitDateTime() {
+        return visitDateTime;
     }
 
     /**
@@ -94,13 +113,14 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags);
+                && tags.equals(otherPerson.tags)
+                && visitDateTime.equals(otherPerson.visitDateTime);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, address, tags, visitDateTime);
     }
 
     @Override
@@ -111,6 +131,7 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("visitDateTime", visitDateTime)
                 .toString();
     }
 

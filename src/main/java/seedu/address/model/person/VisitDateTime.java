@@ -61,7 +61,7 @@ public class VisitDateTime {
      * Returns true if this VisitDateTime has a value.
      */
     public boolean isPresent() {
-        return value == null;
+        return value != null;
     }
 
     /**
