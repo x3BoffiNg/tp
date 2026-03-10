@@ -101,9 +101,9 @@ public class PersonBuilder {
         return this;
     }
 
-     /**
-      * Builds and returns the {@code Person} object.
-      */
+    /**
+     * Builds and returns the {@code Person} object.
+     */
     public Person build() {
         return new Person(name, phone, email, address, tags, visitDateTime);
     }
