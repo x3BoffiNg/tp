@@ -74,7 +74,7 @@ public class VisitDateTimeTest {
     @Test
     public void testGetDisplayValue() {
         VisitDateTime visitDateTime = new VisitDateTime("2026-03-15 14:30");
-        assertEquals("15 Mar 2026, 02:30 pm", visitDateTime.getDisplayValue());
+        assertEquals("15 Mar 2026, 02:30 PM", visitDateTime.getDisplayValue());
     }
 }
 
