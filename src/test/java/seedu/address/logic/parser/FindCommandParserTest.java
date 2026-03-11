@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.TagContainsPredicate;
 
 public class FindCommandParserTest {
 
@@ -22,13 +23,30 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsFindCommand() {
-        // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
+                new FindCommand(
+                        new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
 
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+        // correct syntax with prefix
+        assertParseSuccess(parser, "find n/Alice Bob", expectedFindCommand);
+
+        // allow surrounding whitespace
+        assertParseSuccess(parser, "find   n/Alice Bob   ", expectedFindCommand);
     }
+
+    @Test
+    public void parse_tagArgs_returnsFindCommand() {
+        FindCommand expected =
+                new FindCommand(new TagContainsPredicate("friends"));
+
+        assertParseSuccess(parser, "find t/friends", expected);
+    }
+
+    @Test
+    public void parse_missingPrefix_throwsParseException() {
+        assertParseFailure(parser, "find Alice Bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
 
 }
