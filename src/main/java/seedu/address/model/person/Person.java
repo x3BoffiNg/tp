@@ -19,6 +19,7 @@ public class Person {
     private final Name name;
     private final Phone phone;
     private final Email email;
+    private final Note note;
 
     // Data fields
     private final Address address;
@@ -28,12 +29,13 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Note note, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.note = note;
         this.tags.addAll(tags);
         this.visitDateTime = new VisitDateTime(); // Empty by default
     }
@@ -65,6 +67,10 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public Note getNote() {
+        return note;
     }
 
     public VisitDateTime getVisitDateTime() {
@@ -112,6 +118,7 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && note.equals(otherPerson.note)
                 && tags.equals(otherPerson.tags)
                 && visitDateTime.equals(otherPerson.visitDateTime);
     }
@@ -119,7 +126,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, visitDateTime);
+        return Objects.hash(name, phone, email, address, note, tags, visitDateTime);
     }
 
     @Override
@@ -130,6 +137,7 @@ public class Person {
         sb.append(", phone=").append(phone);
         sb.append(", email=").append(email);
         sb.append(", address=").append(address);
+        sb.append(", note=").append(note);
         sb.append(", tags=").append(tags);
 
         if (visitDateTime.isPresent()) {

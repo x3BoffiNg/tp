@@ -42,7 +42,9 @@ public class Messages {
                 .append("; Email: ")
                 .append(person.getEmail())
                 .append("; Address: ")
-                .append(person.getAddress());
+                .append(person.getAddress())
+                .append("; Note: ")
+                .append(person.getNote());
 
         if (person.getVisitDateTime().isPresent()) {
             builder.append("; Next Visit: ")

@@ -1,0 +1,51 @@
+package seedu.address.model.person;
+
+import static java.util.Objects.requireNonNull;
+
+/**
+ * Represents a Person's note in the address book.
+ */
+public class Note {
+
+    public static final String MESSAGE_CONSTRAINTS = "Notes can be any values, and it should not be null";
+
+    /*
+     * Allows any character, also empty strings.
+     */
+    public static final String VALIDATION_REGEX = ".*";
+    public final String value;
+
+    /**
+     * Constructs a {@code Note}.
+     *
+     * @param note A valid note.
+     */
+    public Note(String note) {
+        requireNonNull(note);
+        this.value = note;
+    }
+
+    /**
+     * Returns true if a given string is a valid note.
+     */
+    public static boolean isValidNote(String test) {
+        return test.matches(VALIDATION_REGEX);
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof Note // instanceof handles nulls
+                && value.equals(((Note) other).value));
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+}
