@@ -1,9 +1,9 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT;
 
 import org.junit.jupiter.api.Test;
 
@@ -41,3 +41,4 @@ public class ListCommandParserTest {
                 new ListCommand("name"));
     }
 }
+
