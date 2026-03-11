@@ -19,7 +19,7 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
 
     private final CommandExecutor commandExecutor;
-    private String mostRecentCommand = "";
+    private final CommandHistory commandHistory = new CommandHistory();
 
     @FXML
     private TextField commandTextField;
@@ -46,7 +46,7 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
-        mostRecentCommand = commandText;
+        commandHistory.add(commandText);
 
         try {
             commandExecutor.execute(commandText);
@@ -57,15 +57,21 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
-     * Handles key presses in the command box to support command recall.
+     * Handles UP and DOWN arrow key presses in the command box to cycle through
+     * command history, mirroring standard terminal behaviour.
      */
     private void handleCommandHistoryNavigation(KeyEvent event) {
-        if (event.getCode() != KeyCode.DOWN || mostRecentCommand.isEmpty()) {
+        String recalled;
+        if (event.getCode() == KeyCode.UP) {
+            recalled = commandHistory.navigateUp();
+        } else if (event.getCode() == KeyCode.DOWN) {
+            recalled = commandHistory.navigateDown();
+        } else {
             return;
         }
 
-        commandTextField.setText(mostRecentCommand);
-        commandTextField.positionCaret(mostRecentCommand.length());
+        commandTextField.setText(recalled);
+        commandTextField.positionCaret(recalled.length());
         event.consume();
     }
 
