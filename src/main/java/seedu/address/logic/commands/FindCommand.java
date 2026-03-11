@@ -24,7 +24,7 @@ public class FindCommand extends Command {
             + "Parameters: \n"
             + PREFIX_NAME + "NAME \n"
             + "OR \n"
-            + PREFIX_TAG + "PHONE \n"
+            + PREFIX_TAG + "TAG \n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "NAME \n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "TAG ";
 
