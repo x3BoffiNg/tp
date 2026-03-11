@@ -42,6 +42,8 @@ public class PersonCard extends UiPart<Region> {
     private Label note;
     @FXML
     private FlowPane tags;
+    @FXML
+    private Label visitDateTime;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -66,5 +68,12 @@ public class PersonCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+
+        // Set visit date time if present
+        if (person.getVisitDateTime().isPresent()) {
+            visitDateTime.setText("Next Visit: " + person.getVisitDateTime().getDisplayValue());
+        } else {
+            visitDateTime.setText("");
+        }
     }
 }

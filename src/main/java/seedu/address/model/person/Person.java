@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -25,6 +24,7 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final VisitDateTime visitDateTime;
 
     /**
      * Every field must be present and not null.
@@ -37,6 +37,22 @@ public class Person {
         this.address = address;
         this.note = note;
         this.tags.addAll(tags);
+        this.visitDateTime = new VisitDateTime(); // Empty by default
+    }
+
+    /**
+     * Constructor with optional visitDateTime field.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Note note, Set<Tag> tags,
+                  VisitDateTime visitDateTime) {
+        requireAllNonNull(name, phone, email, address, note, tags, visitDateTime);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.note = note;
+        this.tags.addAll(tags);
+        this.visitDateTime = visitDateTime;
     }
 
     public Name getName() {
@@ -57,6 +73,10 @@ public class Person {
 
     public Note getNote() {
         return note;
+    }
+
+    public VisitDateTime getVisitDateTime() {
+        return visitDateTime;
     }
 
     /**
@@ -101,25 +121,33 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && note.equals(otherPerson.note)
-                && tags.equals(otherPerson.tags);
+                && tags.equals(otherPerson.tags)
+                && visitDateTime.equals(otherPerson.visitDateTime);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, note, tags);
+        return Objects.hash(name, phone, email, address, note, tags, visitDateTime);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("note", note)
-                .add("tags", tags)
-                .toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getCanonicalName()).append("{");
+        sb.append("name=").append(name);
+        sb.append(", phone=").append(phone);
+        sb.append(", email=").append(email);
+        sb.append(", address=").append(address);
+        sb.append(", note=").append(note);
+        sb.append(", tags=").append(tags);
+
+        if (visitDateTime.isPresent()) {
+            sb.append(", visitDateTime=").append(visitDateTime);
+        }
+
+        sb.append("}");
+        return sb.toString();
     }
 
 }

@@ -14,6 +14,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Note;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.VisitDateTime;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -136,5 +137,23 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String visitDateTime} into a {@code VisitDateTime}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code visitDateTime} is invalid.
+     */
+    public static VisitDateTime parseVisitDateTime(String visitDateTime) throws ParseException {
+        requireNonNull(visitDateTime);
+        String trimmedVisitDateTime = visitDateTime.trim();
+        if (trimmedVisitDateTime.isEmpty()) {
+            return new VisitDateTime(); // Return empty if not provided
+        }
+        if (!VisitDateTime.isValidVisitDateTime(trimmedVisitDateTime)) {
+            throw new ParseException(VisitDateTime.MESSAGE_CONSTRAINTS);
+        }
+        return new VisitDateTime(trimmedVisitDateTime);
     }
 }

@@ -9,6 +9,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Note;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.VisitDateTime;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -29,6 +30,7 @@ public class PersonBuilder {
     private Address address;
     private Note note;
     private Set<Tag> tags;
+    private VisitDateTime visitDateTime;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -40,6 +42,7 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         note = new Note(DEFAULT_NOTE);
         tags = new HashSet<>();
+        visitDateTime = new VisitDateTime();
     }
 
     /**
@@ -52,6 +55,7 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         note = personToCopy.getNote();
         tags = new HashSet<>(personToCopy.getTags());
+        visitDateTime = personToCopy.getVisitDateTime();
     }
 
     /**
@@ -102,8 +106,19 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code VisitDateTime} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withVisitDateTime(String visitDateTime) {
+        this.visitDateTime = new VisitDateTime(visitDateTime);
+        return this;
+    }
+
+    /**
+     * Builds and returns the {@code Person} object.
+     */
     public Person build() {
-        return new Person(name, phone, email, address, note, tags);
+        return new Person(name, phone, email, address, note, tags, visitDateTime);
     }
 
 }

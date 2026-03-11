@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -17,7 +18,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Note;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.VisitDateTime;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -26,13 +29,16 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_VISIT_DATE_TIME = "2026-13-40 25:99";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_ADDRESS = "123 Main Street #0505";
     private static final String VALID_EMAIL = "rachel@example.com";
+    private static final String VALID_NOTE = "Meet client at lobby.";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_VISIT_DATE_TIME = "2026-03-15 14:30";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -148,6 +154,21 @@ public class ParserUtilTest {
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
     }
 
+    @Test public void parseNote_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseNote(null));
+    }
+
+    @Test public void parseNote_validValueWithoutWhitespace_returnsNote() throws Exception {
+        Note expectedNote = new Note(VALID_NOTE);
+        assertEquals(expectedNote, ParserUtil.parseNote(VALID_NOTE));
+    }
+
+    @Test public void parseNote_validValueWithWhitespace_returnsTrimmedNote() throws Exception {
+        String noteWithWhitespace = WHITESPACE + VALID_NOTE + WHITESPACE;
+        Note expectedNote = new Note(VALID_NOTE);
+        assertEquals(expectedNote, ParserUtil.parseNote(noteWithWhitespace));
+    }
+
     @Test
     public void parseTag_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseTag(null));
@@ -192,5 +213,58 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseVisitDateTime_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseVisitDateTime(null));
+    }
+
+    @Test
+    public void parseVisitDateTime_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseVisitDateTime(INVALID_VISIT_DATE_TIME));
+    }
+
+    @Test
+    public void parseVisitDateTime_validValueWithoutWhitespace_returnsVisitDateTime() throws Exception {
+        VisitDateTime expectedVisitDateTime = new VisitDateTime(VALID_VISIT_DATE_TIME);
+        assertEquals(expectedVisitDateTime, ParserUtil.parseVisitDateTime(VALID_VISIT_DATE_TIME));
+    }
+
+    @Test
+    public void parseVisitDateTime_validValueWithWhitespace_returnsTrimmedVisitDateTime() throws Exception {
+        String visitDateTimeWithWhitespace = WHITESPACE + VALID_VISIT_DATE_TIME + WHITESPACE;
+        VisitDateTime expectedVisitDateTime = new VisitDateTime(VALID_VISIT_DATE_TIME);
+        assertEquals(expectedVisitDateTime, ParserUtil.parseVisitDateTime(visitDateTimeWithWhitespace));
+    }
+
+    @Test
+    public void parseVisitDateTime_blankAfterTrim_returnsEmptyVisitDateTime() throws Exception {
+        VisitDateTime visitDateTime = ParserUtil.parseVisitDateTime("   ");
+        assertFalse(visitDateTime.isPresent());
+        assertEquals("", visitDateTime.toString());
+    }
+
+    @Test
+    public void parseVisitDateTime_validInput_success() throws Exception {
+        VisitDateTime visitDateTime = ParserUtil.parseVisitDateTime("2026-12-01 14:00");
+        assertTrue(visitDateTime.isPresent());
+    }
+
+    @Test
+    public void parseVisitDateTime_invalidInput_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseVisitDateTime("invalid input"));
+    }
+
+    @Test
+    public void parseVisitDateTime_emptyString_returnsEmptyVisitDateTime() throws Exception {
+        VisitDateTime expected = new VisitDateTime();
+        assertEquals(expected, ParserUtil.parseVisitDateTime(""));
+    }
+
+    @Test
+    public void parseVisitDateTime_whitespaceOnly_returnsEmptyVisitDateTime() throws Exception {
+        VisitDateTime expected = new VisitDateTime();
+        assertEquals(expected, ParserUtil.parseVisitDateTime("   "));
     }
 }

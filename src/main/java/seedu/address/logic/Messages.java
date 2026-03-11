@@ -44,9 +44,15 @@ public class Messages {
                 .append("; Address: ")
                 .append(person.getAddress())
                 .append("; Note: ")
-                .append(person.getNote())
-                .append("; Tags: ");
+                .append(person.getNote());
+
+        if (person.getVisitDateTime().isPresent()) {
+            builder.append("; Next Visit: ")
+                    .append(person.getVisitDateTime().getDisplayValue());
+        }
+        builder.append("; Tags: ");
         person.getTags().forEach(builder::append);
+
         return builder.toString();
     }
 

@@ -88,6 +88,10 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different visitDateTime -> returns false
+        editedAlice = new PersonBuilder(ALICE).withVisitDateTime("2026-12-01 14:00").build();
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
@@ -96,5 +100,36 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress()
                 + ", note=" + ALICE.getNote() + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
+    }
+
+    @Test
+    public void hashCodeMethod() {
+        // same values -> same hash code
+        Person aliceCopy = new PersonBuilder(ALICE).build();
+        assertEquals(ALICE.hashCode(), aliceCopy.hashCode());
+
+        // with visitDateTime -> same values same hash code
+        Person aliceWithVisit = new PersonBuilder(ALICE).withVisitDateTime("2026-12-01 14:00").build();
+        Person aliceWithVisitCopy = new PersonBuilder(ALICE).withVisitDateTime("2026-12-01 14:00").build();
+        assertEquals(aliceWithVisit.hashCode(), aliceWithVisitCopy.hashCode());
+    }
+
+    @Test
+    public void toStringMethod_withVisitDateTime() {
+        Person aliceWithVisitDateTime = new PersonBuilder(ALICE)
+                .withVisitDateTime("2026-12-01 14:00")
+                .build();
+
+        String expected = Person.class.getCanonicalName()
+                + "{name=" + aliceWithVisitDateTime.getName()
+                + ", phone=" + aliceWithVisitDateTime.getPhone()
+                + ", email=" + aliceWithVisitDateTime.getEmail()
+                + ", address=" + aliceWithVisitDateTime.getAddress()
+                + ", note=" + aliceWithVisitDateTime.getNote()
+                + ", tags=" + aliceWithVisitDateTime.getTags()
+                + ", visitDateTime=" + aliceWithVisitDateTime.getVisitDateTime()
+                + "}";
+
+        assertEquals(expected, aliceWithVisitDateTime.toString());
     }
 }
