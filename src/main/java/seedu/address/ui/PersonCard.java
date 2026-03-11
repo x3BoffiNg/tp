@@ -39,6 +39,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label note;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -51,7 +53,16 @@ public class PersonCard extends UiPart<Region> {
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
+        note.setText(person.getNote().value);
         email.setText(person.getEmail().value);
+
+        if (person.getNote().value.isEmpty()) {
+            note.setVisible(false);
+            note.setManaged(false); // remove the space if the person with no note
+        } else {
+            note.setText(person.getNote().value);
+        }
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
