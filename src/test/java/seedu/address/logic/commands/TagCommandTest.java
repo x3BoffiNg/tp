@@ -103,6 +103,24 @@ public class TagCommandTest {
     }
 
     @Test
+    public void hashCodeMethod() {
+        Index targetIndex = Index.fromOneBased(1);
+        Set<Tag> addTags = new HashSet<>();
+        addTags.add(new Tag("Tag1"));
+        Set<Tag> deleteTags = new HashSet<>();
+        deleteTags.add(new Tag("Tag2"));
+
+        TagCommand tagCommand = new TagCommand(targetIndex, addTags, deleteTags);
+
+        // same values should have same hash code
+        TagCommand sameCommand = new TagCommand(targetIndex, addTags, deleteTags);
+        assertEquals(tagCommand.hashCode(), sameCommand.hashCode());
+
+        TagCommand differentIndexCommand = new TagCommand(Index.fromOneBased(2), addTags, deleteTags);
+        assertFalse(tagCommand.hashCode() == differentIndexCommand.hashCode());
+    }
+
+    @Test
     public void execute_invalidIndex_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         TagCommand tagCommand = new TagCommand(outOfBoundIndex, new HashSet<>(), new HashSet<>());
