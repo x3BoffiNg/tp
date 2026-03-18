@@ -13,6 +13,8 @@ public class CliSyntax {
     public static final Prefix PREFIX_NOTE = new Prefix("nt/");
     public static final Prefix PREFIX_TAG = new Prefix("t/");
     public static final Prefix PREFIX_VISIT = new Prefix("v/");
+    public static final Prefix PREFIX_ADD_TAG = new Prefix("at/");
+    public static final Prefix PREFIX_DELETE_TAG = new Prefix("dt/");
 
     /* Prefix definition for List Sorting */
     public static final Prefix PREFIX_SORT = new Prefix("s/");
