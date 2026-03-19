@@ -73,7 +73,7 @@ public class PersonCard extends UiPart<Region> {
         if (person.getVisitDateTime().isPresent()) {
             visitDateTime.setText("Next Visit: " + person.getVisitDateTime().getDisplayValue());
         } else {
-            visitDateTime.setText("---No Visit Date Set---");
+            visitDateTime.setText("--- No Visit Date Set ---");
         }
     }
 }
