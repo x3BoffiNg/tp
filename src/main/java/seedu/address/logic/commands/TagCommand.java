@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADD_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELETE_TAG;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,11 +24,15 @@ public class TagCommand extends Command {
 
     public static final String COMMAND_WORD = "tag";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits tags of the person identified "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits tag(s) of the person identified "
             + "by the index number used in the person list. "
             + "Cannot add duplicate tag or delete non-existent tag.\n"
-            + "Parameters: INDEX (must be a positive integer) [at/TAG_TO_ADD] [dt/TAG_TO_DELETE]\n"
-            + "Example: " + COMMAND_WORD + " 1 at/neighbour dt/friend";
+            + "Parameters: INDEX (must be a positive integer) "
+            + "[" + PREFIX_ADD_TAG + "TAG_TO_ADD]... "
+            + "[" + PREFIX_DELETE_TAG + "TAG_TO_DELETE]...\n"
+            + "Example: " + COMMAND_WORD + " 1 "
+            + PREFIX_ADD_TAG + "neighbour "
+            + PREFIX_DELETE_TAG + "friend";
 
     public static final String MESSAGE_TAG_PERSON_SUCCESS = "Updated tags for Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "Tag to add or delete must be provided.";
