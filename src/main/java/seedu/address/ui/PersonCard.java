@@ -58,11 +58,11 @@ public class PersonCard extends UiPart<Region> {
         note.setText(person.getNote().value);
         email.setText(person.getEmail().value);
 
-        if (person.getNote().value.isEmpty()) {
-            note.setVisible(false);
-            note.setManaged(false); // remove the space if the person with no note
+        String noteRecord = person.getNote().value;
+        if (noteRecord == null || noteRecord.trim().isEmpty()) {
+            note.setText("--- No Notes Record ---");
         } else {
-            note.setText(person.getNote().value);
+            note.setText(noteRecord);
         }
 
         person.getTags().stream()
