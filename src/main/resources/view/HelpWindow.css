@@ -17,3 +17,43 @@
 #helpMessageContainer {
     -fx-background-color: derive(#1d1d1d, 20%);
 }
+
+/* ScrollPane styling */
+#commandScrollPane {
+    -fx-background-color: #1d1d1d;
+    -fx-padding: 0;
+}
+
+#commandScrollPane:focused {
+    -fx-background-color: #1d1d1d;
+}
+
+#commandScrollPane .viewport {
+    -fx-background-color: #1d1d1d;
+}
+
+#commandScrollPane .scroll-bar {
+    -fx-background-color: #2a2a2a;
+}
+
+#commandScrollPane .scroll-bar:vertical .thumb {
+    -fx-background-color: #4a4a4a;
+    -fx-background-radius: 5;
+}
+
+#commandScrollPane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #5a5a5a;
+}
+
+#commandScrollPane .scroll-bar:vertical .increment-button,
+#commandScrollPane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: #2a2a2a;
+}
+
+/* VBox container styling */
+#commandContainer {
+    -fx-background-color: #1d1d1d;
+    -fx-padding: 15;
+    -fx-spacing: 20;
+}
+
