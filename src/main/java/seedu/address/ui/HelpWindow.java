@@ -163,45 +163,75 @@ public class HelpWindow extends UiPart<Stage> {
      * @param usageAndExamples Usage details and optional examples
      */
     private void addCommandSection(String commandName, String description, String usageAndExamples) {
-        // Command name label
+        Label nameLabel = createCommandNameLabel(commandName);
+        String[] parsedHelpText = parseHelpText(usageAndExamples);
+        String descriptionText = parsedHelpText[0].isEmpty() ? description : parsedHelpText[0];
+
+        Label descriptionLabel = createDescriptionLabel(descriptionText);
+        Label usageLabel = createCodeBlockLabel(parsedHelpText[1], "#9ad0ff");
+        Label examplesLabel = createCodeBlockLabel(parsedHelpText[2], "#ffd479");
+
+        VBox commandBox = createCommandBox(nameLabel, descriptionLabel, usageLabel, examplesLabel);
+        commandContainer.getChildren().add(commandBox);
+    }
+
+    private Label createCommandNameLabel(String commandName) {
         Label nameLabel = new Label(commandName.toUpperCase());
         nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #4db8ff;");
+        return nameLabel;
+    }
 
-        // Description label
-        Label descLabel = new Label(description);
-        descLabel.setStyle("-fx-text-fill: #e0e0e0; -fx-font-size: 14;");
-        descLabel.setWrapText(true);
+    private Label createDescriptionLabel(String description) {
+        Label descriptionLabel = new Label(description);
+        descriptionLabel.setStyle("-fx-text-fill: #e0e0e0; -fx-font-size: 15;");
+        descriptionLabel.setWrapText(true);
+        return descriptionLabel;
+    }
 
-        String usageText = usageAndExamples;
+    private String[] parseHelpText(String usageAndExamples) {
+        String usageWithoutExamples = usageAndExamples;
         String examplesText = "";
+
         int firstExampleIndex = usageAndExamples.indexOf("\nExample:");
         if (firstExampleIndex >= 0) {
-            usageText = usageAndExamples.substring(0, firstExampleIndex).trim();
+            usageWithoutExamples = usageAndExamples.substring(0, firstExampleIndex).trim();
             examplesText = usageAndExamples.substring(firstExampleIndex + 1).trim();
         }
 
-        // Usage label (blue)
-        Label usageLabel = new Label(usageText);
-        usageLabel.setStyle("-fx-text-fill: #9ad0ff; -fx-font-family: 'Courier New'; "
-                + "-fx-font-size: 14; -fx-background-color: #2a2a2a; -fx-padding: 10;");
-        usageLabel.setWrapText(true);
-        usageLabel.setMaxWidth(Double.MAX_VALUE);
+        String descriptionText = "";
+        String usageText = usageWithoutExamples;
+        int parametersIndex = usageWithoutExamples.indexOf("Parameters:");
 
-        // Example label (gold) shown only when examples exist
-        Label examplesLabel = new Label(examplesText);
-        examplesLabel.setStyle("-fx-text-fill: #ffd479; -fx-font-family: 'Courier New'; "
-                + "-fx-font-size: 14; -fx-background-color: #2a2a2a; -fx-padding: 10;");
-        examplesLabel.setWrapText(true);
-        examplesLabel.setMaxWidth(Double.MAX_VALUE);
-        examplesLabel.setManaged(!examplesText.isEmpty());
-        examplesLabel.setVisible(!examplesText.isEmpty());
+        if (parametersIndex >= 0) {
+            String descriptionFromUsage = usageWithoutExamples.substring(0, parametersIndex).trim();
+            usageText = usageWithoutExamples.substring(parametersIndex).trim();
 
-        // Container for this command section
+            int colonIndex = descriptionFromUsage.indexOf(':');
+            if (colonIndex >= 0 && colonIndex + 1 < descriptionFromUsage.length()) {
+                descriptionFromUsage = descriptionFromUsage.substring(colonIndex + 1).trim();
+            }
+            descriptionText = descriptionFromUsage.replace("\n", " ").trim();
+        }
+
+        return new String[] {descriptionText, usageText, examplesText};
+    }
+
+    private Label createCodeBlockLabel(String text, String textColor) {
+        Label codeBlockLabel = new Label(text);
+        codeBlockLabel.setStyle("-fx-text-fill: " + textColor + "; -fx-font-family: 'Courier New'; "
+                + "-fx-font-size: 15; -fx-background-color: #2a2a2a; -fx-padding: 10;");
+        codeBlockLabel.setWrapText(true);
+        codeBlockLabel.setMaxWidth(Double.MAX_VALUE);
+        codeBlockLabel.setManaged(!text.isEmpty());
+        codeBlockLabel.setVisible(!text.isEmpty());
+        return codeBlockLabel;
+    }
+
+    private VBox createCommandBox(Label nameLabel, Label descriptionLabel, Label usageLabel, Label examplesLabel) {
         VBox commandBox = new VBox(5);
         commandBox.setStyle("-fx-border-color: #4db8ff; -fx-border-width: 0 0 0 4; -fx-padding: 12;");
         commandBox.setMaxWidth(Double.MAX_VALUE);
-        commandBox.getChildren().addAll(nameLabel, descLabel, usageLabel, examplesLabel);
-
-        commandContainer.getChildren().add(commandBox);
+        commandBox.getChildren().addAll(nameLabel, descriptionLabel, usageLabel, examplesLabel);
+        return commandBox;
     }
 }
