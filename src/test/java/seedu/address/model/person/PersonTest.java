@@ -97,6 +97,11 @@ public class PersonTest {
         // different visitDateTime -> returns false
         editedAlice = new PersonBuilder(ALICE).withVisitDateTime("2026-12-01 14:00").build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different isArchived -> returns false
+        editedAlice = new PersonBuilder(ALICE).build();
+        editedAlice.setArchived(true);
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
