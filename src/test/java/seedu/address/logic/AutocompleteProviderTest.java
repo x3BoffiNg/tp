@@ -69,7 +69,8 @@ public class AutocompleteProviderTest {
         assertEquals("edit 1 p/", AutocompleteProvider.suggestCompletion("edit 1 p").orElseThrow());
         assertEquals("edit 1 n/Bob p/", AutocompleteProvider.suggestCompletion("edit 1 n/Bob ").orElseThrow());
 
-        String allPrefixesInput = "edit 1 n/Bob p/91234567 e/test@example.com a/Blk 1 nt/note v/2026-12-01 14:00 t/client ";
+        String allPrefixesInput =
+                "edit 1 n/Bob p/91234567 e/test@example.com a/Blk 1 nt/note v/2026-12-01 14:00 t/client ";
         assertEquals(allPrefixesInput + "t/", AutocompleteProvider.suggestCompletion(allPrefixesInput).orElseThrow());
     }
 
@@ -104,6 +105,7 @@ public class AutocompleteProviderTest {
     @Test
     public void suggestCompletion_leadingWhitespaceBeforePrefix_returnsCompletedPrefix() {
         assertEquals("add   n/", AutocompleteProvider.suggestCompletion("add   n").orElseThrow());
-        assertEquals("          add         n/", AutocompleteProvider.suggestCompletion("          add         n").orElseThrow());
+        assertEquals("          add         n/",
+                AutocompleteProvider.suggestCompletion("          add         n").orElseThrow());
     }
 }

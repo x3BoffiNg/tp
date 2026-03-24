@@ -142,6 +142,7 @@ public class CommandBox extends UiPart<Region> {
         assert userInput != null : "showAutocompleteHint userInput must not be null";
         assert suggestion != null : "showAutocompleteHint suggestion must not be null";
         assert suggestion.startsWith(userInput) : "Autocomplete suggestion must extend user input";
+
         String suffix = suggestion.substring(userInput.length());
         autocompleteHintLabel.setText(suffix);
         autocompleteHintLabel.setTranslateX(computeAutocompleteHintOffset(userInput));

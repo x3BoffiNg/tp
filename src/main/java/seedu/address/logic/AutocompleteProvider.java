@@ -33,11 +33,6 @@ import seedu.address.logic.commands.TagCommand;
  */
 public final class AutocompleteProvider {
 
-    private AutocompleteProvider() {}
-
-    private record AutocompletePrefixConfig(boolean requiresIndex,
-            List<String> prefixes, Set<String> repeatablePrefixes) {}
-
     private static final List<String> COMMAND_WORDS = List.of(
             AddCommand.COMMAND_WORD,
             ClearCommand.COMMAND_WORD,
@@ -75,6 +70,11 @@ public final class AutocompleteProvider {
                     List.of(PREFIX_ADD_TAG.getPrefix(), PREFIX_DELETE_TAG.getPrefix()),
                     Set.of())
     );
+
+    private AutocompleteProvider() {}
+
+    private record AutocompletePrefixConfig(boolean requiresIndex,
+            List<String> prefixes, Set<String> repeatablePrefixes) {}
 
     /**
      * Returns a full completion suggestion for the current user input.
@@ -137,9 +137,11 @@ public final class AutocompleteProvider {
 
     private static Optional<String> suggestArgumentCompletion(String input) {
         assert input != null : "suggestArgumentCompletion input must not be null";
+
         int firstWhitespaceIndex = firstWhitespaceIndex(input);
         assert firstWhitespaceIndex >= 0 : "suggestArgumentCompletion expects command + whitespace + args";
         String commandWord = input.substring(0, firstWhitespaceIndex);
+
         AutocompletePrefixConfig config = AUTOCOMPLETE_PREFIX_CONFIGS.get(commandWord);
         if (config == null || config.prefixes().isEmpty()) {
             return Optional.empty();
@@ -247,7 +249,7 @@ public final class AutocompleteProvider {
                 return i;
             }
         }
-        
+
         return value.length();
     }
 
@@ -281,7 +283,7 @@ public final class AutocompleteProvider {
 
     private static String lastToken(String value) {
         int lastWhitespace = -1;
-        
+
         for (int i = value.length() - 1; i >= 0; i--) {
             if (Character.isWhitespace(value.charAt(i))) {
                 lastWhitespace = i;
