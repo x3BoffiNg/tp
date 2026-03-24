@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_NONEXISTENCE_INDEX;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,8 @@ public class DeleteCommand extends Command {
      */
     public DeleteCommand(List<Index> targetIndexes) {
         requireNonNull(targetIndexes);
-        this.targetIndexes = Collections.unmodifiableList(new ArrayList<>(targetIndexes));
+        //this.targetIndexes = Collections.unmodifiableList(new ArrayList<>(targetIndexes));
+        this.targetIndexes = List.copyOf(targetIndexes);
     }
 
     @Override

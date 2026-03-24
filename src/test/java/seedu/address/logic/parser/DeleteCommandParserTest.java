@@ -1,5 +1,10 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_EMPTY_INPUT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_RANGE;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_TOKEN;
+import static seedu.address.logic.Messages.MESSAGE_RANGE_TOO_LARGE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -9,8 +14,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.DeleteCommand;
+
 
 /**
  * As we are only doing white-box testing, our test cases do not cover path variations
@@ -36,7 +41,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_invalidArgs_throwsParseException() {
         assertParseFailure(parser, "a",
-                Messages.MESSAGE_INVALID_TOKEN + "\n" + MESSAGE_USAGE);
+                MESSAGE_INVALID_TOKEN + "\n" + MESSAGE_USAGE);
     }
 
     @Test
@@ -92,37 +97,37 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_invalidNegativeIndex_failure() {
         assertParseFailure(parser, "-1",
-                Messages.MESSAGE_INVALID_INDEX + "\n" + MESSAGE_USAGE);
+                MESSAGE_INVALID_INDEX + "\n" + MESSAGE_USAGE);
     }
 
     @Test
     public void parse_zeroIndex_failure() {
         assertParseFailure(parser, "0",
-                Messages.MESSAGE_INVALID_INDEX + "\n" + MESSAGE_USAGE);
+                MESSAGE_INVALID_INDEX + "\n" + MESSAGE_USAGE);
     }
 
     @Test
     public void parse_invalidRange_failure() {
         assertParseFailure(parser, "5-3",
-                Messages.MESSAGE_INVALID_RANGE + "\n" + MESSAGE_USAGE);
+                MESSAGE_INVALID_RANGE + "\n" + MESSAGE_USAGE);
     }
 
     @Test
     public void parse_invalidFormat_failure() {
         assertParseFailure(parser, "1,2",
-                Messages.MESSAGE_INVALID_TOKEN + "\n" + MESSAGE_USAGE);
+                MESSAGE_INVALID_TOKEN + "\n" + MESSAGE_USAGE);
     }
 
     @Test
     public void parse_emptyInput_failure() {
         assertParseFailure(parser, "",
-                Messages.MESSAGE_EMPTY_INPUT + "\n" + MESSAGE_USAGE);
+                MESSAGE_EMPTY_INPUT + "\n" + MESSAGE_USAGE);
     }
 
     @Test
     public void parse_largeRange_failure() {
         assertParseFailure(parser, "1-1000",
-                Messages.MESSAGE_RANGE_TOO_LARGE + "\n" + MESSAGE_USAGE);
+                MESSAGE_RANGE_TOO_LARGE + "\n" + MESSAGE_USAGE);
     }
 }
 

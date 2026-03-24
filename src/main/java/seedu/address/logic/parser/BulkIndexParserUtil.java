@@ -22,6 +22,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public final class BulkIndexParserUtil {
 
     private static final int MAX_RANGE_SIZE = 100;
+    private static final String RANGE_SEPARATOR = "-";
 
     private BulkIndexParserUtil() {}
 
@@ -44,7 +45,7 @@ public final class BulkIndexParserUtil {
             if (token.matches("-\\d+")) {
                 throw new ParseException(MESSAGE_INVALID_INDEX);
             }
-            if (token.contains("-")) {
+            if (token.contains(RANGE_SEPARATOR)) {
                 parseRangeToken(token, indexSet);
             } else {
                 parseSingleToken(token, indexSet);
@@ -67,7 +68,7 @@ public final class BulkIndexParserUtil {
     private static void parseRangeToken(String token, Set<Integer> indexSet)
             throws ParseException {
 
-        String[] parts = token.split("-", -1);
+        String[] parts = token.split(RANGE_SEPARATOR, -1);
 
         if (parts.length != 2) {
             throw new ParseException(MESSAGE_INVALID_TOKEN);
