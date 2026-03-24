@@ -146,8 +146,14 @@ public class PersonTest {
     }
 
     @Test
-    public void constructor_defaultValues() {
-        Person person = new PersonBuilder().build();
+    public void constructor_sixArg_defaultsApplied() {
+        Person person = new Person(
+                ALICE.getName(),
+                ALICE.getPhone(),
+                ALICE.getEmail(),
+                ALICE.getAddress(),
+                ALICE.getNote(),
+                ALICE.getTags());
 
         assertFalse(person.getVisitDateTime().isPresent());
         assertFalse(person.isArchived());
