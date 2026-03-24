@@ -20,7 +20,7 @@ public class UnarchiveCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Unarchives the person identified by the index number.\n"
-            + "Parameters: INDEX\n"
+            + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_UNARCHIVE_PERSON_SUCCESS = "Unarchived: %1$s";

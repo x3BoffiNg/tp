@@ -63,8 +63,16 @@ public interface Model {
      */
     void deletePerson(Person target);
 
+    /**
+     * Archives the given person.
+     * The person must exist in the address book.
+     */
     void archivePerson(Person personToArchive);
 
+    /**
+     * Unarchives the given person.
+     * The person must exist in the address book AND must be archived.
+     */
     void unarchivePerson(Person personToUnarchive);
 
     /**
