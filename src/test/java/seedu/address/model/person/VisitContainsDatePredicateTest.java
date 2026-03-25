@@ -40,6 +40,15 @@ public class VisitContainsDatePredicateTest {
     }
 
     @Test
+    public void test_boundaryAndEmpty_returnsCorrectBoolean() {
+        LocalDate date = LocalDate.of(2026, 1, 1);
+        VisitContainsDatePredicate predicate = new VisitContainsDatePredicate(date, date);
+
+        assertTrue(predicate.test(new PersonBuilder().withVisitDateTime("2026-01-01 12:00").build()));
+        assertFalse(predicate.equals(new VisitContainsDatePredicate(date, date.plusDays(1))));
+    }
+
+    @Test
     public void equals() {
         LocalDate date1 = LocalDate.of(2026, 1, 1);
         LocalDate date2 = LocalDate.of(2026, 1, 2);

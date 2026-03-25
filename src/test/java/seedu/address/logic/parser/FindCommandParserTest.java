@@ -82,4 +82,10 @@ public class FindCommandParserTest {
         assertParseFailure(parser, " " + PREFIX_START_DATE + "2026-12-31 "
                 + PREFIX_END_DATE + "2026-01-01", "Start date cannot be after end date!");
     }
+
+    @Test
+    public void parse_missingEndDate_throwsParseException() {
+        assertParseFailure(parser, " " + PREFIX_START_DATE + "2026-01-01",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
 }
