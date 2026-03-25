@@ -23,6 +23,8 @@ public class ArchiveCommand extends Command {
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
     public static final String MESSAGE_ARCHIVE_PERSON_SUCCESS = "Archived: %1$s";
+    public static final String MESSAGE_PERSON_ALREADY_ARCHIVED = "%1$s is already archived";
+
     private static final Logger logger = LogsCenter.getLogger(ArchiveCommand.class);
     private final Index targetIndex;
 
@@ -46,6 +48,13 @@ public class ArchiveCommand extends Command {
 
         Person personToArchive = lastShownList.get(targetIndex.getZeroBased());
         logger.fine("Person to archive: " + personToArchive);
+
+        if (personToArchive.isArchived()) {
+            logger.warning("Attempted to archive an already archived person: " + personToArchive);
+            return new CommandResult(
+                    String.format(MESSAGE_PERSON_ALREADY_ARCHIVED,
+                            personToArchive.getName()));
+        }
 
         model.archivePerson(personToArchive);
 

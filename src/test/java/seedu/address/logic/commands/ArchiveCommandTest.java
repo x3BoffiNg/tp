@@ -10,11 +10,14 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalPersons;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -75,6 +78,38 @@ public class ArchiveCommandTest {
         expectedModel.updateFilteredPersonList(p -> !p.isArchived());
 
         assertCommandSuccess(archiveCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_alreadyArchivedPerson_returnsMessagePersonAlreadyArchived() throws CommandException {
+        // Archive a person first
+        Person personToArchive = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        ArchiveCommand firstArchiveCommand = new ArchiveCommand(INDEX_FIRST_PERSON);
+        firstArchiveCommand.execute(model);
+
+        // Reset filter to show archived persons
+        model.updateFilteredPersonList(p -> true); // Show all persons
+
+        // Find the index of the already-archived person in the now-unfiltered list
+        List<Person> allPersons = model.getFilteredPersonList();
+        int archivedPersonIndex = -1;
+        for (int i = 0; i < allPersons.size(); i++) {
+            if (allPersons.get(i).equals(personToArchive)) {
+                archivedPersonIndex = i;
+                break;
+            }
+        }
+
+        // Try archiving the already-archived person
+        ArchiveCommand secondArchiveCommand = new ArchiveCommand(Index.fromZeroBased(archivedPersonIndex));
+
+        String expectedMessage = String.format(ArchiveCommand.MESSAGE_PERSON_ALREADY_ARCHIVED,
+                personToArchive.getName());
+
+        Model expectedModel = getExpectedModelCopy();
+        expectedModel.updateFilteredPersonList(p -> true); // Show all persons
+
+        assertCommandSuccess(secondArchiveCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
