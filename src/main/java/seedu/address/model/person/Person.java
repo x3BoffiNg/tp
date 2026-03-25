@@ -53,7 +53,7 @@ public class Person {
         this.note = note;
         this.tags.addAll(tags);
         this.visitDateTime = visitDateTime;
-    }
+    } // Edit here every new feature
 
     public Name getName() {
         return name;
