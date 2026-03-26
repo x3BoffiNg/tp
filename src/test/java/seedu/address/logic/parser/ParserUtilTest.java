@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -266,5 +267,16 @@ public class ParserUtilTest {
     public void parseVisitDateTime_whitespaceOnly_returnsEmptyVisitDateTime() throws Exception {
         VisitDateTime expected = new VisitDateTime();
         assertEquals(expected, ParserUtil.parseVisitDateTime("   "));
+    }
+
+    @Test
+    public void parseDate_validValue_returnsDate() throws Exception {
+        LocalDate expectedDate = LocalDate.of(2026, 12, 31);
+        assertEquals(expectedDate, ParserUtil.parseDate("2026-12-31"));
+    }
+
+    @Test
+    public void parseDate_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseDate("31-12-2026"));
     }
 }
