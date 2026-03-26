@@ -85,20 +85,12 @@ public class CommandBox extends UiPart<Region> {
     }
 
     private void handleUpKeyEvent(KeyEvent event) {
-        if (event.getCode() != KeyCode.UP) {
-            return;
-        }
-
         String recalled = commandHistory.navigateUp();
         fillRecalledCommand(recalled);
         event.consume();
     }
 
     private void handleDownKeyEvent(KeyEvent event) {
-        if (event.getCode() != KeyCode.DOWN) {
-            return;
-        }
-
         String recalled = commandHistory.navigateDown();
         fillRecalledCommand(recalled);
         event.consume();
@@ -110,10 +102,6 @@ public class CommandBox extends UiPart<Region> {
     }
 
     private void handleTabKeyEvent(KeyEvent event) {
-        if (event.getCode() != KeyCode.TAB) {
-            return;
-        }
-
         if (!acceptAutocompleteSuggestion()) {
             return;
         }
