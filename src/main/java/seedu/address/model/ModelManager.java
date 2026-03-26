@@ -36,7 +36,7 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        filteredPersons = new FilteredList<>(this.addressBook.getPersonList(), p -> !p.isArchived());
         sortedPersons = new SortedList<>(filteredPersons);
     }
 
@@ -100,6 +100,18 @@ public class ModelManager implements Model {
     @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
+    }
+
+    @Override
+    public void archivePerson(Person person) {
+        requireNonNull(person);
+        person.setArchived(true);
+    }
+
+    @Override
+    public void unarchivePerson(Person person) {
+        requireNonNull(person);
+        person.setArchived(false);
     }
 
     @Override

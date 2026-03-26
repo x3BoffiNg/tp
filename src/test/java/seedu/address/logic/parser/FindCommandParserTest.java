@@ -6,6 +6,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START_DATE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.logic.parser.FindCommandParser.MESSAGE_INVALID_DATE_RANGE;
+import static seedu.address.logic.parser.FindCommandParser.MESSAGE_MISSING_DATE_RANGE_PAIR;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -19,9 +21,7 @@ import seedu.address.model.person.VisitContainsDatePredicate;
 
 public class FindCommandParserTest {
 
-    private static final String MESSAGE_MISSING_DATE_RANGE_PAIR = "Both sd/ and ed/ must be provided together.";
-    private static final String MESSAGE_INVALID_DATE_RANGE = "Start date cannot be after end date!";
-    private FindCommandParser parser = new FindCommandParser();
+    private final FindCommandParser parser = new FindCommandParser();
 
     @Test
     public void parse_emptyArg_throwsParseException() {
