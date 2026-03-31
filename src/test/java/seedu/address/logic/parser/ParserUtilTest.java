@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
@@ -278,5 +278,35 @@ public class ParserUtilTest {
     @Test
     public void parseDate_invalidValue_throwsParseException() {
         assertThrows(ParseException.class, () -> ParserUtil.parseDate("31-12-2026"));
+    }
+
+    @Test
+    public void parseSingleIndexOrThrow_nullInput_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () ->
+                ParserUtil.parseSingleIndexOrThrow(null, "usage"));
+    }
+
+    @Test
+    public void parseSingleIndexOrThrow_emptyInput_throwsParseException() {
+        assertThrows(ParseException.class, "usage", () ->
+                ParserUtil.parseSingleIndexOrThrow("", "usage"));
+    }
+
+    @Test
+    public void parseSingleIndexOrThrow_whitespaceOnly_throwsParseException() {
+        assertThrows(ParseException.class, "usage", () ->
+                ParserUtil.parseSingleIndexOrThrow("   ", "usage"));
+    }
+
+    @Test
+    public void parseSingleIndexOrThrow_multipleTokens_throwsParseException() {
+        assertThrows(ParseException.class, "usage", () ->
+                ParserUtil.parseSingleIndexOrThrow("1 2", "usage"));
+    }
+
+    @Test
+    public void parseSingleIndexOrThrow_nonNumeric_throwsParseException() {
+        assertThrows(ParseException.class, "usage", () ->
+                ParserUtil.parseSingleIndexOrThrow("abc", "usage"));
     }
 }
