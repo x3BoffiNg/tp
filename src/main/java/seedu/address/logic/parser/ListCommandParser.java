@@ -3,6 +3,8 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT;
 
+import java.util.Optional;
+
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -37,9 +39,9 @@ public class ListCommandParser implements Parser<ListCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }
 
-        String getExtraVals = argMultimap.getValue(new Prefix("")).toString();
+        Optional<String> extraVals = argMultimap.getValue(new Prefix(""));
 
-        if (!getExtraVals.isEmpty()) {
+        if (extraVals.isPresent() && !extraVals.get().trim().isEmpty()) {
             // Protects from random strings between prefix or when no prefix
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
