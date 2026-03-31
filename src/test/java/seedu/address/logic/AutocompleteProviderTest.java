@@ -260,8 +260,10 @@ public class AutocompleteProviderTest {
     @Test
     public void suggestCompletion_findRangePrefixPartialAutocompleteMissingPair_suggestsCompletion() {
         // EP: partial typing of range pair with non-blank last token should autocomplete to complete pair
-        assertEquals("find sd/2026-01-01 ed/", AutocompleteProvider.suggestCompletion("find sd/2026-01-01 e").orElseThrow());
-        assertEquals("find ed/2026-12-31 sd/", AutocompleteProvider.suggestCompletion("find ed/2026-12-31 s").orElseThrow());
+        assertEquals("find sd/2026-01-01 ed/",
+                AutocompleteProvider.suggestCompletion("find sd/2026-01-01 e").orElseThrow());
+        assertEquals("find ed/2026-12-31 sd/",
+                AutocompleteProvider.suggestCompletion("find ed/2026-12-31 s").orElseThrow());
     }
 
     @Test
@@ -388,7 +390,7 @@ public class AutocompleteProviderTest {
 
     @Test
     public void suggestCompletion_editWithMultipleInvalidTokensBeforePrefixes_returnsNoSuggestion() {
-        // EP: multiple invalid tokens before first valid prefix  
+        // EP: multiple invalid tokens before first valid prefix
         assertTrue(AutocompleteProvider.suggestCompletion("edit 1 x y z p/").isEmpty());
         assertTrue(AutocompleteProvider.suggestCompletion("edit 1 invalid more stuff n/Bob ").isEmpty());
     }
