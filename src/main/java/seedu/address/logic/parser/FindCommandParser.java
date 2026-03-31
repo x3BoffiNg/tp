@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -76,9 +77,16 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // branch logic to return the relevant find command
         if (hasName) {
-            String keyword = argMultimap.getValue(PREFIX_NAME).get();
-            return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(keyword.split("\\s+"))));
-
+            String raw = argMultimap.getValue(PREFIX_NAME).orElse("");
+            String trimmed = raw.trim();
+            if (trimmed.isEmpty()) {
+                // This catches unhandled bug which causes command to silently fail
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            }
+            List<String> keywords = Arrays.stream(trimmed.split("\\s+"))
+                    .filter(s -> !s.isBlank())
+                    .toList();
+            return new FindCommand(new NameContainsKeywordsPredicate(keywords));
         } else if (hasTag) {
             String tag = argMultimap.getValue(PREFIX_TAG).get();
             return new FindCommand(new TagContainsPredicate(tag));
