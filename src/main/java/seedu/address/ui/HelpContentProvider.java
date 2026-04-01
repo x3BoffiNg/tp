@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ArchiveCommand;
@@ -26,6 +27,19 @@ final class HelpContentProvider {
 
     private static final String PARAMETERS_SECTION_HEADER = "Parameters:";
     private static final String EXAMPLES_SECTION_HEADER = "\nExample:";
+    private static final String EMPTY_STRING = "";
+    private static final String SPACE = " ";
+    private static final String COLON = ":";
+    private static final String NEWLINE_REGEX = "\\R";
+    private static final int NOT_FOUND = -1;
+    private static final int ZERO_POSITION = 0;
+    
+    private static final Set<String> COMMANDS_WITH_HIDDEN_USAGE = Set.of(
+            ListArchiveCommand.COMMAND_WORD,
+            ClearCommand.COMMAND_WORD,
+            HelpCommand.COMMAND_WORD,
+            ExitCommand.COMMAND_WORD
+    );
 
     private static final List<HelpCommandSpec> COMMAND_SPECS = List.of(
             new HelpCommandSpec(AddCommand.COMMAND_WORD, AddCommand.MESSAGE_USAGE),
@@ -37,10 +51,10 @@ final class HelpContentProvider {
             new HelpCommandSpec(NoteCommand.COMMAND_WORD, NoteCommand.MESSAGE_USAGE),
             new HelpCommandSpec(ArchiveCommand.COMMAND_WORD, ArchiveCommand.MESSAGE_USAGE),
             new HelpCommandSpec(UnarchiveCommand.COMMAND_WORD, UnarchiveCommand.MESSAGE_USAGE),
-            new HelpCommandSpec(ListArchiveCommand.COMMAND_WORD, "Usage: " + ListArchiveCommand.COMMAND_WORD),
+            new HelpCommandSpec(ListArchiveCommand.COMMAND_WORD, ListArchiveCommand.MESSAGE_USAGE),
             new HelpCommandSpec(ClearCommand.COMMAND_WORD, ClearCommand.MESSAGE_USAGE),
-            new HelpCommandSpec(HelpCommand.COMMAND_WORD, "Usage: " + HelpCommand.COMMAND_WORD),
-            new HelpCommandSpec(ExitCommand.COMMAND_WORD, "Usage: " + ExitCommand.COMMAND_WORD)
+            new HelpCommandSpec(HelpCommand.COMMAND_WORD, HelpCommand.MESSAGE_USAGE),
+            new HelpCommandSpec(ExitCommand.COMMAND_WORD, ExitCommand.MESSAGE_USAGE)
     );
 
     private HelpContentProvider() {
@@ -55,7 +69,8 @@ final class HelpContentProvider {
 
     private static HelpSection toHelpSection(HelpCommandSpec commandSpec) {
         ParsedHelpText parsed = parseHelpText(commandSpec.usageAndExamples());
-        return new HelpSection(commandSpec.commandWord(), parsed.description(), parsed.usage(), parsed.examples());
+        String usageText = COMMANDS_WITH_HIDDEN_USAGE.contains(commandSpec.commandWord()) ? EMPTY_STRING : parsed.usage();
+        return new HelpSection(commandSpec.commandWord(), parsed.description(), usageText, parsed.examples());
     }
 
     private static ParsedHelpText parseHelpText(String usageAndExamples) {
@@ -63,28 +78,19 @@ final class HelpContentProvider {
         int parametersIndex = indexOfIgnoreCase(baseText.usage(), PARAMETERS_SECTION_HEADER);
 
         if (parametersIndex < 0) {
-            int usageIndex = indexOfIgnoreCase(baseText.usage(), "Usage:");
-            if (usageIndex >= 0) {
-                // For simple commands (no Parameters section), keep description and usage separate.
-                String descriptionPrefix = baseText.usage().substring(0, usageIndex).trim();
-                String usageText = baseText.usage().substring(usageIndex).trim();
-                String descriptionText = extractDescription(descriptionPrefix);
-                return new ParsedHelpText(descriptionText, usageText, baseText.examples());
-            }
 
-            int colonIndex = baseText.usage().indexOf(':');
-            if (colonIndex > 0) {
+            int colonIndex = baseText.usage().indexOf(COLON);
+            if (colonIndex > ZERO_POSITION) {
                 // Support compact format: "command: description".
                 String descriptionText = extractDescription(baseText.usage());
-                String commandWord = baseText.usage().substring(0, colonIndex).trim();
-                String usageText = "Usage: " + commandWord;
-                return new ParsedHelpText(descriptionText, usageText, baseText.examples());
+                String commandWord = baseText.usage().substring(ZERO_POSITION, colonIndex).trim();
+                return new ParsedHelpText(descriptionText, commandWord, baseText.examples());
             }
 
             return baseText;
         }
 
-        String descriptionPrefix = baseText.usage().substring(0, parametersIndex).trim();
+        String descriptionPrefix = baseText.usage().substring(ZERO_POSITION, parametersIndex).trim();
         String usageText = baseText.usage().substring(parametersIndex).trim();
         String descriptionText = extractDescription(descriptionPrefix);
 
@@ -100,26 +106,26 @@ final class HelpContentProvider {
     private static ParsedHelpText splitExamples(String usageAndExamples) {
         requireNonNull(usageAndExamples);
         int firstExampleIndex = indexOfIgnoreCase(usageAndExamples, EXAMPLES_SECTION_HEADER);
-        if (firstExampleIndex < 0) {
-            return new ParsedHelpText("", usageAndExamples.trim(), "");
+        if (firstExampleIndex == NOT_FOUND) {
+            return new ParsedHelpText(EMPTY_STRING, usageAndExamples.trim(), EMPTY_STRING);
         }
 
-        String usageWithoutExamples = usageAndExamples.substring(0, firstExampleIndex).trim();
+        String usageWithoutExamples = usageAndExamples.substring(ZERO_POSITION, firstExampleIndex).trim();
         String examplesText = usageAndExamples.substring(firstExampleIndex + 1).trim();
-        return new ParsedHelpText("", usageWithoutExamples, examplesText);
+        return new ParsedHelpText(EMPTY_STRING, usageWithoutExamples, examplesText);
     }
 
     private static String extractDescription(String descriptionPrefix) {
         requireNonNull(descriptionPrefix);
-        int colonIndex = descriptionPrefix.indexOf(':');
-        if (colonIndex >= 0) {
+        int colonIndex = descriptionPrefix.indexOf(COLON);
+        if (colonIndex >= ZERO_POSITION) {
             if (colonIndex + 1 < descriptionPrefix.length()) {
                 descriptionPrefix = descriptionPrefix.substring(colonIndex + 1).trim();
             } else {
-                descriptionPrefix = "";
+                descriptionPrefix = EMPTY_STRING;
             }
         }
-        return descriptionPrefix.replaceAll("\\R", " ").trim();
+        return descriptionPrefix.replaceAll(NEWLINE_REGEX, SPACE).trim();
     }
 
     record HelpCommandSpec(String commandWord, String usageAndExamples) {
