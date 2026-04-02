@@ -171,7 +171,7 @@ Format:
 * Dates must be valid, (e.g., 2026-04-31 will be rejected)
 * Use `find d/today` to find persons with visits scheduled for the current date
 * For date ranges, both `sd/` (start date) and `ed/` (end date) prefixes are required
-* `sd/` (start date) should appear before `ed/` (end date)
+* Date specified in `ed/` (end date) must be later than or equal to date specified in `sd/` (start date)
 * `sd/today` and `ed/today` can be used
 
 Examples:
