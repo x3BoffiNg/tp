@@ -114,28 +114,77 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by specific field: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose information matches the provided search criteria.
 
-Format: `find n/KEYWORD [MORE_KEYWORDS]` OR `find t/TAG`
+Format:
+- By name: `find n/KEYWORD [MORE_KEYWORDS]`
+- By tag: `find t/TAG`
+- By specific date: `find d/DATE`
+- By today: `find d/today`
+- By date range: `find sd/START_DATE ed/END_DATE`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Name OR Tag can be searched.
-* **For Name**, only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-* **For Tag**, the search for Tag will loop through all persons and find based on Tag name
-* Tag search is case-insensitive. e.g `FAMILY` will match `family`
-* Tag search can ONLY search **one tag** at a time
+> **Note:** The `find` command enforces a **Strict Single-Mode policy** — only one search mode can be used per command.
+
+**Name search rules:**
+* The search is case-insensitive. e.g., `hans` will match `Hans`
+
+**Tag search rules:**
+* Tag search is case-insensitive. e.g., `FAMILY` will match `family`
+* Only **one tag** can be searched at a time
+
+**Date search rules:**
+* Dates must be in `YYYY-MM-DD` format
+* Dates must be valid, (e.g., 2026-04-31 will be rejected)
+* Use `find d/today` to find persons with visits scheduled for the current date
+* For date ranges, both `sd/` (start date) and `ed/` (end date) prefixes are required
+* `sd/today` and `ed/today` can be used
 
 Examples:
 * `find n/John` returns `john` and `John Doe`
-* `find n/alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-* `find t/friends` returns ALL contacts with `friends` tag (case-insensitive)
-  ![result for 'find t/friends'](images/findFriendsTagResult.png)
+* `find t/friends` returns all contacts with the `friends` tag (case-insensitive)
+* `find d/today` returns all persons with visits scheduled for today
+* `find sd/2026-01-01 ed/2026-04-30` returns all persons with visits between 1 January and 30 April 2026
+
+### Adding note to a person : `note`
+
+Adds, replaces, or clears a note for the specified person.
+
+Format: `note INDEX nt/NOTE`
+
+* Adds or replaces the note for the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* To clear a note, provide an empty `nt/` prefix (e.g., `nt/` with no text after it).
+* If the note field is empty, the UI will display a placeholder `--- No Notes Record ---`.
+
+Examples:
+* `note 1 nt/Requires wheelchair assistance` adds or replaces the note for the 1st person in the list.
+* `note 1 nt/` clears the note for the 1st person in the list.
+
+### Managing tags for a person : `tag`
+
+Adds or removes specific tags for the specified person. Unlike `edit`, this command modifies tags incrementally without clearing previous tags.
+
+Format: `tag INDEX [at/TAG_TO_ADD]…​ [dt/TAG_TO_DELETE]…​`
+
+* Operates on the person at the specified `INDEX`. The index **must be a positive integer** 1, 2, 3, …​
+* Use `at/` prefix to add one or more tags.
+* Use `dt/` prefix to delete one or more tags.
+* Both `at/` and `dt/` can be used together in a single command to add and delete tags simultaneously.
+
+<box type="warning" seamless>
+
+**Data Validation:**
+* Adding a tag that already exists on the contact will be rejected.
+* Deleting a tag that does not exist on the contact will be rejected.
+* If any part of the command fails validation, **no changes will be applied**.
+  </box>
+
+Examples:
+* `tag 1 at/caseid2` adds the tag `caseid2` to the 1st person.
+* `tag 1 dt/client` removes the tag `client` from the 1st person.
+* `tag 1 at/client dt/caseid1` adds `client` and removes `caseid1` from the 1st person in a single command.
 
 ### Deleting a person : `delete`
 
