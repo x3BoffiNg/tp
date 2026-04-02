@@ -14,6 +14,14 @@ public class SampleDataUtilTest {
     }
 
     @Test
+    public void getTagSet_validTags_success() {
+        var tags = SampleDataUtil.getTagSet("client", "caseid1");
+
+        assertNotNull(tags);
+        assertTrue(tags.size() == 2);
+    }
+
+    @Test
     public void getSampleAddressBook_notEmpty() {
         assertNotNull(SampleDataUtil.getSampleAddressBook());
     }
