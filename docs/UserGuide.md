@@ -71,7 +71,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 Opens the Help window.
 
-If the Help window is already open, the command focuses on that window instead of opening a new one.
+If the Help window is already open, the command will bring it into focus instead of opening a new window.
 
 ![help message](images/helpMessage.png)
 
