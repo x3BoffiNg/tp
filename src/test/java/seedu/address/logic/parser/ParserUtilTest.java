@@ -270,13 +270,27 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseDate_validValue_returnsDate() throws Exception {
+    public void parseDateOrToday_validDate_returnsDate() throws Exception {
         LocalDate expectedDate = LocalDate.of(2026, 12, 31);
-        assertEquals(expectedDate, ParserUtil.parseDate("2026-12-31"));
+        assertEquals(expectedDate, ParserUtil.parseDateOrToday("2026-12-31"));
+        assertEquals(expectedDate, ParserUtil.parseDateOrToday("  2026-12-31  ")); // to check trimming
     }
 
     @Test
-    public void parseDate_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseDate("31-12-2026"));
+    public void parseDateOrToday_todayKeyword_returnsToday() throws Exception {
+        assertEquals(LocalDate.now(), ParserUtil.parseDateOrToday("today"));
+        assertEquals(LocalDate.now(), ParserUtil.parseDateOrToday("  TODAY  ")); // to check case insensitive
+    }
+
+    @Test
+    public void parseDateOrToday_invalidFormat_throwsParseException() {
+        // Wrong format (DD-MM-YYYY)
+        assertThrows(ParseException.class, () -> ParserUtil.parseDateOrToday("31-12-2026"));
+
+        // Non-existent date (April 31)
+        assertThrows(ParseException.class, () -> ParserUtil.parseDateOrToday("2026-04-31"));
+
+        // Some random text
+        assertThrows(ParseException.class, () -> ParserUtil.parseDateOrToday("random text"));
     }
 }

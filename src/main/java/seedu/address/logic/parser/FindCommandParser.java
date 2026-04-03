@@ -60,10 +60,18 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // only allow exactly one search mode
         int modeCount = 0;
-        if (hasName) { modeCount++; }
-        if (hasTag) { modeCount++; }
-        if (hasDate) { modeCount++; }
-        if (hasRange) { modeCount++; }
+        if (hasName) {
+            modeCount++;
+        }
+        if (hasTag) {
+            modeCount++;
+        }
+        if (hasDate) {
+            modeCount++;
+        }
+        if (hasRange) {
+            modeCount++;
+        }
 
         // reject for multiple modes are used or no valid mode
         if (modeCount > 1) {
@@ -84,15 +92,12 @@ public class FindCommandParser implements Parser<FindCommand> {
             return new FindCommand(new TagContainsPredicate(tag));
 
         } else if (hasDate) {
-            String dateValue = argMultimap.getValue(PREFIX_DATE).get().trim();
-            LocalDate targetDate = dateValue.equalsIgnoreCase(KEYWORD_TODAY)
-                    ? LocalDate.now()
-                    : ParserUtil.parseDate(dateValue);
+            LocalDate targetDate = ParserUtil.parseDateOrToday(argMultimap.getValue(PREFIX_DATE).get());
             return new FindCommand(new VisitContainsDatePredicate(targetDate, targetDate));
 
         } else {
-            LocalDate startDate = ParserUtil.parseDate(argMultimap.getValue(PREFIX_START_DATE).get());
-            LocalDate endDate = ParserUtil.parseDate(argMultimap.getValue(PREFIX_END_DATE).get());
+            LocalDate startDate = ParserUtil.parseDateOrToday(argMultimap.getValue(PREFIX_START_DATE).get());
+            LocalDate endDate = ParserUtil.parseDateOrToday(argMultimap.getValue(PREFIX_END_DATE).get());
 
             if (startDate.isAfter(endDate)) {
                 throw new ParseException(MESSAGE_INVALID_DATE_RANGE);

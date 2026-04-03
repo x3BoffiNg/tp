@@ -161,18 +161,24 @@ public class ParserUtil {
 
     /**
      * Parses a {@code String date} into a {@code LocalDate}.
-     * Leading and trailing whitespaces will be trimmed.
+     * Supports the keyword 'today' or the format YYYY-MM-DD.
      *
-     * @param date The date string to be parsed (Expected format: YYYY-MM-DD).
+     * @param date The date string to be parsed.
      * @return The parsed LocalDate object.
-     * @throws ParseException if the given {@code date} is invalid or not in the correct format.
+     * @throws ParseException if the given {@code date} is invalid.
      */
-    public static LocalDate parseDate(String date) throws ParseException {
+    public static LocalDate parseDateOrToday(String date) throws ParseException {
         requireNonNull(date);
         String trimmedDate = date.trim();
+
+        if (trimmedDate.equalsIgnoreCase("today")) {
+            return LocalDate.now();
+        }
+
         try {
             return LocalDate.parse(trimmedDate);
         } catch (DateTimeParseException e) {
+            // catch the format errors and invalid dates (e.g., April 31)
             throw new ParseException(VisitDateTime.MESSAGE_DATE_CONSTRAINTS);
         }
     }
