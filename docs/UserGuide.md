@@ -6,7 +6,13 @@
 
 # CareSync User Guide
 
-CareSync is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CareSync can get your contact management tasks done faster than traditional GUI apps.
+CareSync is a desktop application designed for **Social Workers in Singapore** to manage client and support organization contact details, as well as track home visit schedules efficiently.
+
+CareSync is **optimized for use via a Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CareSync can get your contact management tasks done faster than traditional GUI applications.
+
+## Table of contents
+- [Quick start](#quick-start)
+- [Features](#features)
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -15,31 +21,48 @@ CareSync is a **desktop app for managing contacts, optimized for use via a  Line
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html)
+### Step 1 - Java Installation
+- Ensure that you have Java `17` or above installed on your computer. Installation guides can be found [here](https://se-education.org/guides/tutorials/javaInstallation.html).
 
-2. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103-F11-1/tp/releases).
+<box type="important">
+Follow the guide for your operating system!
+</box>
 
-3. Copy the file to the folder you want to use as the _home folder_ for CareSync.
+- To check for the Java version installed on your computer, open a command terminal and enter `java --version`. Example output for Java `17`:
+```
+java version "17.0.17" 2025-10-21 LTS
+Java(TM) SE Runtime Environment (build 17.0.17+8-LTS-360)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0.17+8-LTS-360, mixed mode, sharing)
+```
 
-4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CareSync.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+### Step 2 - Download and Run CareSync
+
+1. Download the latest `CareSync.jar` file from [here](https://github.com/AY2526S2-CS2103-F11-1/tp/releases).
+
+2. Copy the file to the folder you want to use as the _home folder_ for CareSync.
+
+3. Open a command terminal and navigate (`cd`) to the folder you placed `CareSync.jar` .
+
+4. In the command terminal, enter `java -jar CareSync.jar` to run the application.<br>
+   A GUI similar to the below should appear in a few seconds. There will be some sample data in the application to get you started!.<br>
    ![Ui](images/Ui.png)
 
-5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+### Step 3 - Get Started!
+
+- Type a command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to CareSync.
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00` : Adds a contact named `John Doe` to CareSync with the specified `note` and `visit date and time`.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
-   * `clear` : Deletes all contacts.
+   * `find t/caseid1` : Lists all contacts with the `caseid1` tag.
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+- For details of each command, refer to the [Features](#features) section below.
 
 --------------------------------------------------------------------------------------------------------------------
 
