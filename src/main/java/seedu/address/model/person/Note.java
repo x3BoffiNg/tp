@@ -13,7 +13,9 @@ public class Note {
         + "and contain only alphanumeric characters, spaces, commas, and full stops";
 
     /*
-     * Allows letters, numbers, spaces, commas, and full stops.
+     * Regex breakdown:
+     * - ^ and $            : match the whole note string
+     * - [a-zA-Z0-9,. ]*    : zero or more letters, digits, commas, periods, or spaces
      */
     public static final String VALIDATION_REGEX = "^[a-zA-Z0-9,. ]*$";
     public final String value;

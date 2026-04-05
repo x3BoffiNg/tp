@@ -16,8 +16,9 @@ public class Name {
                     + "and must be at most " + MAX_LENGTH + " characters long";
 
     /*
-     * The first character of the name must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * Regex breakdown:
+     * - [\p{Alnum}]       : first character must be alphanumeric (prevents blank/space-only input)
+     * - [\p{Alnum} ]*     : remaining characters may be alphanumeric or spaces
      */
     public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
 

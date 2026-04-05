@@ -16,8 +16,11 @@ public class Address {
                     + "apostrophes, parentheses, hyphens, and hashtags";
 
     /*
-     * The first character of the address must be alphanumeric,
-     * and only common address punctuation is allowed afterwards.
+     * Regex breakdown:
+     * - [\p{Alnum}]                 : first character must be alphanumeric (prevents blank input)
+     * - [\p{Alnum} ,.#'()\-]*       : remaining characters may include letters/digits, spaces, and
+     *                                 common address punctuation: comma, period, hashtag, apostrophe,
+     *                                 parentheses, and hyphen
      */
     public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ,.#'()\\-]*";
 

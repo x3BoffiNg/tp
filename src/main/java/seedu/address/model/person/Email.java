@@ -24,14 +24,21 @@ public class Email {
             + "    - have each domain label start and end with alphanumeric characters\n"
             + "    - have each domain label consist of alphanumeric characters, separated only by hyphens, if any.\n"
             + "3. The total email length must not exceed " + MAX_LENGTH + " characters.";
-    // alphanumeric and special characters
-    private static final String ALPHANUMERIC_NO_UNDERSCORE = "[^\\W_]+"; // alphanumeric characters except underscore
+
+    // [^\W_]+ means "word characters without underscore", i.e. letters and digits only.
+    private static final String ALPHANUMERIC_NO_UNDERSCORE = "[^\\W_]+";
+    // Local-part starts with alphanumeric chars, then allows groups like ".abc", "-xyz", "+1", or "_tmp".
+    // This prevents local-part from starting/ending with a special character.
     private static final String LOCAL_PART_REGEX = "^" + ALPHANUMERIC_NO_UNDERSCORE + "([" + SPECIAL_CHARACTERS + "]"
             + ALPHANUMERIC_NO_UNDERSCORE + ")*";
+    // A domain label: alphanumeric chunks optionally separated by single hyphens (e.g. "example", "my-domain").
     private static final String DOMAIN_PART_REGEX = ALPHANUMERIC_NO_UNDERSCORE
             + "(-" + ALPHANUMERIC_NO_UNDERSCORE + ")*";
-    private static final String DOMAIN_LAST_PART_REGEX = "(" + DOMAIN_PART_REGEX + "){2,}$"; // At least two chars
+    // Final domain label must be at least 2 characters and end the entire email.
+    private static final String DOMAIN_LAST_PART_REGEX = "(" + DOMAIN_PART_REGEX + "){2,}$";
+    // Zero or more "label." prefixes, followed by the required last label.
     private static final String DOMAIN_REGEX = "(" + DOMAIN_PART_REGEX + "\\.)*" + DOMAIN_LAST_PART_REGEX;
+    // Full email format: local-part + '@' + domain.
     public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_REGEX;
 
     public final String value;
