@@ -1,8 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_START_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.function.Predicate;
 
@@ -19,14 +23,17 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: "
-            + PREFIX_NAME + "NAME [ADDITIONAL NAMES] \n"
-            + "OR \n"
-            + PREFIX_TAG + "TAG \n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose attributes contain any of "
+            + "the specified keywords or dates and displays them as a list with index numbers.\n"
+            + "Parameters: \n"
+            + "1. " + PREFIX_NAME + "NAME [ADDITIONAL NAMES] \n"
+            + "2. " + PREFIX_TAG + "TAG \n"
+            + "3. " + PREFIX_DATE + "today OR DATE (Find visits for today or a specific date YYYY-MM-DD) \n"
+            + "4. " + PREFIX_START_DATE + "START_DATE " + PREFIX_END_DATE + "END_DATE (Find visits within a range) \n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "NAME \n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "TAG ";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "TAG \n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_DATE + "today OR 2026-12-01 \n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_START_DATE + "2026-01-01 " + PREFIX_END_DATE + "2026-12-31";
 
     private final Predicate<Person> predicate;
 
@@ -38,7 +45,7 @@ public class FindCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.updateFilteredPersonList(predicate);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS.and(predicate));
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }

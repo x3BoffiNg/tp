@@ -15,8 +15,11 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.SortField;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -139,7 +142,7 @@ public class ModelManagerTest {
 
         ModelManager model = new ModelManager(addressBook, new UserPrefs());
 
-        model.sortFilteredPersonList("name");
+        model.sortFilteredPersonList(SortField.NAME);
 
         assertEquals(ALICE, model.getFilteredPersonList().get(0));
         assertEquals(BENSON, model.getFilteredPersonList().get(1));
@@ -154,11 +157,101 @@ public class ModelManagerTest {
 
         ModelManager model = new ModelManager(addressBook, new UserPrefs());
 
-        model.sortFilteredPersonList("name");
+        model.sortFilteredPersonList(SortField.NAME);
         model.resetSort();
 
         assertEquals(BENSON, model.getFilteredPersonList().get(0));
         assertEquals(ALICE, model.getFilteredPersonList().get(1));
     }
 
+    @Test
+    public void sortFilteredPersonList_sortByVisit_success() {
+        Person personWithLaterVisit = new PersonBuilder(ALICE)
+                .withVisitDateTime("2026-01-01 10:00")
+                .build();
+
+        Person personWithEarlierVisit = new PersonBuilder(BENSON)
+                .withVisitDateTime("2025-01-01 10:00")
+                .build();
+
+        Person personWithoutVisit = new PersonBuilder()
+                .withName("No Visit")
+                .build();
+
+        AddressBook addressBook = new AddressBookBuilder()
+                .withPerson(personWithLaterVisit)
+                .withPerson(personWithoutVisit)
+                .withPerson(personWithEarlierVisit)
+                .build();
+
+        ModelManager model = new ModelManager(addressBook, new UserPrefs());
+
+        model.sortFilteredPersonList(SortField.VISIT);
+
+        assertEquals(personWithEarlierVisit, model.getFilteredPersonList().get(0));
+        assertEquals(personWithLaterVisit, model.getFilteredPersonList().get(1));
+        assertEquals(personWithoutVisit, model.getFilteredPersonList().get(2));
+    }
+
+    @Test
+    public void constructor_withArchivedPerson_filtersOutArchivedPerson() {
+        Person activePerson = new PersonBuilder(ALICE).build();
+        Person archivedPerson = new PersonBuilder(BENSON).build();
+        archivedPerson.setArchived(true);
+
+        AddressBook addressBook = new AddressBookBuilder()
+                .withPerson(activePerson)
+                .withPerson(archivedPerson)
+                .build();
+
+        ModelManager model = new ModelManager(addressBook, new UserPrefs());
+
+        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals(activePerson, model.getFilteredPersonList().get(0));
+    }
+
+    @Test
+    public void archivePerson_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.archivePerson(null));
+    }
+
+    @Test
+    public void archivePerson_validPerson_setsArchivedTrue() {
+        Person person = new PersonBuilder(ALICE).build();
+        modelManager.addPerson(person);
+
+        modelManager.archivePerson(person);
+
+        assertTrue(person.isArchived());
+    }
+
+    @Test
+    public void unarchivePerson_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.unarchivePerson(null));
+    }
+
+    @Test
+    public void unarchivePerson_validPerson_setsArchivedFalse() {
+        Person person = new PersonBuilder(ALICE).build();
+        person.setArchived(true);
+
+        AddressBook addressBook = new AddressBookBuilder().withPerson(person).build();
+        ModelManager model = new ModelManager(addressBook, new UserPrefs());
+
+        model.unarchivePerson(person);
+
+        assertFalse(person.isArchived());
+    }
+
+    @Test
+    public void predicateShowAllPersons_filtersArchivedPersons() {
+        Person active = new PersonBuilder(ALICE).build();
+        Person archived = new PersonBuilder(BENSON).build();
+        archived.setArchived(true);
+
+        assertTrue(PREDICATE_SHOW_ALL_PERSONS.test(active));
+        assertFalse(PREDICATE_SHOW_ALL_PERSONS.test(archived));
+    }
+
 }
+

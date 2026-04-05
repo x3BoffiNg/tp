@@ -15,6 +15,9 @@ public class CliSyntax {
     public static final Prefix PREFIX_VISIT = new Prefix("v/");
     public static final Prefix PREFIX_ADD_TAG = new Prefix("at/");
     public static final Prefix PREFIX_DELETE_TAG = new Prefix("dt/");
+    public static final Prefix PREFIX_DATE = new Prefix("d/");
+    public static final Prefix PREFIX_START_DATE = new Prefix("sd/");
+    public static final Prefix PREFIX_END_DATE = new Prefix("ed/");
 
     /* Prefix definition for List Sorting */
     public static final Prefix PREFIX_SORT = new Prefix("s/");
