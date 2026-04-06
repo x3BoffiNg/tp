@@ -587,7 +587,7 @@ Steps:
 Expected:
 - The most recent window size and location is retained.
 
-### Viewing help
+### Viewing help : `help`
 
 *Prerequisites:*
 - CareSync is running.
@@ -603,14 +603,14 @@ Expected:
 !!**Positive Test Case 2: Run the help command with existing help window**!!
 
 Steps:
-1. Run `help`
+1. Run `help`.
 2. Minimise the help window.
 3. Run `help` again.
 
 Expected:
-- Exisiting help window is focused.
+- Existing help window is focused.
 
-!!**Positive Test Case 3: Run the help command with unknown parameters**!!
+!!**Positive Test Case 3: Run help with extra parameters**!!
 
 Steps:
 1. Run `help 123`
