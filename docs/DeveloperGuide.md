@@ -1122,6 +1122,82 @@ Steps:
 Expected:
 - Command fails with invalid displayed index message.
 
+### Clearing all entries : `clear`
+
+*Prerequisites:*
+- At least one contact exists.
+
+!!**Positive Test Case 1: Clear all contacts**!!
+
+Steps:
+1. Run `clear`
+
+Expected:
+- Command succeeds with `Address book has been cleared!`.
+- Contact list becomes empty.
+
+!!**Positive Test Case 2: Clear with extra text**!!
+
+Steps:
+1. Run `clear now`
+
+Expected:
+- Command still clears all entries (extra text is ignored).
+
+### Exiting the program : `exit`
+
+*Prerequisites:*
+- CareSync is running.
+
+!!**Positive Test Case 1: Exit command**!!
+
+Steps:
+1. Run `exit`
+
+Expected:
+- CareSync closes.
+
+!!**Positive Test Case 2: Exit with extra text**!!
+
+Steps:
+1. Run `exit please`
+
+Expected:
+- CareSync closes (extra text is ignored).
+
+### Autocompleting a command
+
+*Prerequisites:*
+- CareSync command box is focused.
+
+!!**Positive Test Case 1: Autocomplete command word**!!
+
+Steps:
+1. Type `d`.
+2. Press `TAB`.
+
+Expected:
+- Input autocompletes to `delete`.
+
+!!**Positive Test Case 2: Autocomplete prefixes**!!
+
+Steps:
+1. Type `add `.
+2. Press `TAB` repeatedly.
+
+Expected:
+- Prefix suggestions are inserted in order, starting with `n/`.
+
+!!**Positive Test Case 3: Autocomplete with index-required command**!!
+
+Steps:
+1. Type `edit ` and press `TAB`.
+2. Type `edit 1 ` and press `TAB`.
+
+Expected:
+- Step 1: no prefix suggestion is accepted.
+- Step 2: prefix suggestion is accepted (starts with `n/`).
+
 
 ### Saving data
 
