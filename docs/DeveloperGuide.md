@@ -726,6 +726,264 @@ Steps:
 Expected:
 - Message: `Tag names should be alphanumeric ...`
 - No contact is added.
+- Command fails with tag constraint message.
+
+### Archiving a contact : `archive`
+
+*Prerequisites:*
+- At least one visible contact exists in the current list.
+
+!!**Positive Test Case 1: Archive by valid index**!!
+
+Steps:
+1. Run `list`.
+2. Run `archive 1`.
+
+Expected:
+- Command succeeds with `Archived: ...` message.
+
+!!**Positive Test Case 2: Archive from filtered result**!!
+
+Steps:
+1. Run `find n/Alex`.
+2. Run `archive 1`.
+
+Expected:
+- The first displayed person in filtered results is archived.
+
+!!**Negative Test Case 1: Invalid index format**!!
+
+Steps:
+1. Run `archive a`
+
+Expected:
+- Command fails with usage/invalid index error.
+
+!!**Negative Test Case 2: Out-of-range index**!!
+
+Steps:
+1. Run `archive 999`
+
+Expected:
+- Command fails with invalid displayed index message.
+
+### Listing all contacts : `list`
+
+*Prerequisites:*
+- CareSync is running.
+
+!!**Positive Test Case 1: List without sorting**!!
+
+Steps:
+1. Run `list`
+
+Expected:
+- All contacts are displayed.
+
+!!**Positive Test Case 2: List sorted by name**!!
+
+Steps:
+1. Run `list s/name`
+
+Expected:
+- All contacts are displayed sorted by name.
+
+!!**Positive Test Case 3: List sorted by visit**!!
+
+Steps:
+1. Run `list s/visit`
+
+Expected:
+- All contacts are displayed sorted by visit date/time.
+
+!!**Negative Test Case 1: Invalid sort field**!!
+
+Steps:
+1. Run `list s/phone`
+
+Expected:
+- Command fails with list usage message.
+
+!!**Negative Test Case 2: Unexpected preamble token**!!
+
+Steps:
+1. Run `list abc`
+
+Expected:
+- Command fails with list usage message.
+
+### Listing archived contacts : `list-archive`
+
+*Prerequisites:*
+- At least one archived contact exists (optional, for non-empty results).
+
+!!**Positive Test Case 1: List archived contacts**!!
+
+Steps:
+1. Run `list-archive`
+
+Expected:
+- Only archived contacts are shown.
+
+!!**Positive Test Case 2: Run with extra text**!!
+
+Steps:
+1. Run `list-archive 123`
+
+Expected:
+- Command still works and shows archived contacts.
+
+### Editing a contact : `edit`
+
+*Prerequisites:*
+- At least one contact exists in current displayed list.
+
+!!**Positive Test Case 1: Edit one field**!!
+
+Steps:
+1. Run `edit 1 p/+65 9000-1234`
+
+Expected:
+- Command succeeds and phone for contact 1 is updated.
+
+!!**Positive Test Case 2: Edit multiple fields**!!
+
+Steps:
+1. Run `edit 1 e/newmail@example.com a/#12-34, Sample Road`
+
+Expected:
+- Command succeeds and both fields are updated.
+
+!!**Positive Test Case 3: Clear tags using `t/`**!!
+
+Steps:
+1. Run `edit 1 t/`
+
+Expected:
+- Command succeeds and tags for contact 1 are cleared.
+
+!!**Negative Test Case 1: No fields supplied**!!
+
+Steps:
+1. Run `edit 1`
+
+Expected:
+- Command fails with message: `At least one field to edit must be provided.`
+
+!!**Negative Test Case 2: Invalid index**!!
+
+Steps:
+1. Run `edit 999 p/91234567`
+
+Expected:
+- Command fails with invalid displayed index message.
+
+!!**Negative Test Case 3: Duplicate tag values**!!
+
+Steps:
+1. Run `edit 1 t/friend t/Friend`
+
+Expected:
+- Command fails with duplicate-tags message.
+
+### Locating contacts by specified field: `find`
+
+*Prerequisites:*
+- CareSync is running.
+
+!!**Positive Test Case 1: Find by name keywords**!!
+
+Steps:
+1. Run `find n/Alex David`
+
+Expected:
+- Contacts with matching name keywords are shown.
+
+!!**Positive Test Case 2: Find by tag**!!
+
+Steps:
+1. Run `find t/friends`
+
+Expected:
+- Contacts with `friends` tag are shown.
+
+!!**Positive Test Case 3: Find by specific date**!!
+
+Steps:
+1. Run `find d/2026-12-01`
+
+Expected:
+- Contacts with visit date on 2026-12-01 are shown.
+
+!!**Positive Test Case 4: Find by date range**!!
+
+Steps:
+1. Run `find sd/2026-01-01 ed/2026-12-31`
+
+Expected:
+- Contacts with visit dates in range are shown.
+
+!!**Negative Test Case 1: Mixed modes in one command**!!
+
+Steps:
+1. Run `find n/Alex t/friends`
+
+Expected:
+- Command fails with message: `Only one search type allowed.`
+
+!!**Negative Test Case 2: Missing date range pair**!!
+
+Steps:
+1. Run `find sd/2026-01-01`
+
+Expected:
+- Command fails with message: `Both sd/ and ed/ must be provided together.`
+
+!!**Negative Test Case 3: Invalid date range order**!!
+
+Steps:
+1. Run `find sd/2026-12-31 ed/2026-01-01`
+
+Expected:
+- Command fails with message: `Start date cannot be after end date!`
+
+### Adding note to a contact : `note`
+
+*Prerequisites:*
+- At least one contact exists in current displayed list.
+
+!!**Positive Test Case 1: Add/replace note**!!
+
+Steps:
+1. Run `note 1 nt/Requires wheelchair assistance`
+
+Expected:
+- Command succeeds and note is updated for contact 1.
+
+!!**Positive Test Case 2: Clear note**!!
+
+Steps:
+1. Run `note 1 nt/`
+
+Expected:
+- Command succeeds and note is cleared for contact 1.
+
+!!**Negative Test Case 1: Missing note prefix**!!
+
+Steps:
+1. Run `note 1`
+
+Expected:
+- Command fails with note usage message.
+
+!!**Negative Test Case 2: Invalid index**!!
+
+Steps:
+1. Run `note 999 nt/Follow up`
+
+Expected:
+- Command fails with invalid displayed index message.
+
 
 ### Saving data
 
