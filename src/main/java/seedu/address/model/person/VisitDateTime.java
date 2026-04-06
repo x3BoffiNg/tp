@@ -14,9 +14,10 @@ import java.util.Locale;
  */
 public class VisitDateTime {
 
-    public static final String MESSAGE_CONSTRAINTS =
-            "Visit date and time should be in the format: yyyy-MM-dd HH:mm (e.g., 2026-03-15 14:30)";
-    public static final String MESSAGE_DATE_CONSTRAINTS = "Dates must be in YYYY-MM-DD format!";
+    public static final String MESSAGE_CONSTRAINTS = "Visit date and time must be a valid date and time in the format: "
+                    + "yyyy-MM-dd HH:mm (e.g., 2026-03-15 14:30)";
+    public static final String MESSAGE_DATE_CONSTRAINTS = "Date must be a valid date in the format yyyy-MM-dd "
+                    + "(e.g., 2026-03-15) or the keyword 'today'.";
 
     public static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     public static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a",

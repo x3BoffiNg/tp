@@ -126,14 +126,14 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         LocalDate targetDate = dateValue.equalsIgnoreCase(KEYWORD_TODAY)
                 ? LocalDate.now()
-                : ParserUtil.parseDate(dateValue);
+                : ParserUtil.parseDateOrToday(dateValue);
 
         return new FindCommand(new VisitContainsDatePredicate(targetDate, targetDate));
     }
 
     private FindCommand parseDateRangeFind(ArgumentMultimap argMultimap) throws ParseException {
-        LocalDate startDate = ParserUtil.parseDate(getRequiredValue(argMultimap, PREFIX_START_DATE).trim());
-        LocalDate endDate = ParserUtil.parseDate(getRequiredValue(argMultimap, PREFIX_END_DATE).trim());
+        LocalDate startDate = ParserUtil.parseDateOrToday(getRequiredValue(argMultimap, PREFIX_START_DATE).trim());
+        LocalDate endDate = ParserUtil.parseDateOrToday(getRequiredValue(argMultimap, PREFIX_END_DATE).trim());
 
         if (startDate.isAfter(endDate)) {
             throw new ParseException(MESSAGE_INVALID_DATE_RANGE);
