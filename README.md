@@ -25,6 +25,7 @@ Social workers like **Alice** (a community social service officer) often handle 
 * Add and delete contacts.
 * Store details such as contact name, phone number, email, address etc.
 * Search contacts by name, tags or their visit dates.
+* Sort contact list by name or their visit dates.
 * Archive old contacts without deleting them.
 
 ### Visit Management
@@ -39,6 +40,7 @@ Social workers like **Alice** (a community social service officer) often handle 
 * **CLI-First Design:** Accomplish tasks faster than a GUI with specialized commands.
 * **Command History:** Reuse past commands to save time.
 * **Autocompletion:** Autocomplete commands with the click of a button to increase efficiency.
+* **Bulk Operations:** Delete multiple contacts with a single command.
 
 ## More Info
 
