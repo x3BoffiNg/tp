@@ -166,74 +166,68 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Archive Feature
 
-#### Implementation
+#### Proposed Implementation
 
-The archive mechanism is implemented using an archive flag stored inside each person.
+The archive mechanism is facilitated by an archive flag stored in each Person.
+A person is considered archived when this flag is true, and active otherwise.
 
-- Each person has an `isArchived` state.
-- Active views hide archived persons by default.
-- The `archive` command marks a selected person as archived.
-- The `unarchive` command restores a selected archived person.
-- The `list-archive` command filters and shows only archived persons.
+The mechanism uses the following Model operations:
 
-#### Command Flow
+- archivePerson(person): marks a person as archived.
+- unarchivePerson(person): marks a person as active again.
+- updateFilteredPersonList(predicate): refreshes the displayed list for the current command context.
 
-1. User enters `archive INDEX`.
-2. Logic routes the command text to `ArchiveCommandParser`.
-3. Parser validates input and creates `ArchiveCommand`.
-4. `ArchiveCommand` checks that `INDEX` exists in the current filtered list.
-5. Model marks the selected person as **archived**.
-6. Model refreshes the current filtered list.
-7. Logic saves the updated address book to `storage`.
-8. UI receives and displays a success message.
+Given below is an example usage scenario and how the archive mechanism behaves at each step.
 
-The sequence diagram below illustrates the interactions within the Logic component when executing the command `archive 1`.
+Step 1. The user executes archive 1.
+The archive command validates the index against the current filtered list and archives the selected person.
 
-<puml src="diagrams/ArchiveSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the archive command" /> 
+Step 2. The command refreshes the filtered list using the current predicate so the UI reflects the updated state.
+
+Step 3. The user executes list-archive.
+The displayed list is filtered to show only archived persons.
+
+Step 4. The user executes unarchive 1 from the archived list.
+The unarchive command marks the selected person as active again and refreshes the list.
+
+Step 5. The command result is returned to Logic, and Logic persists the updated address book through Storage.
+
+The following sequence diagram shows how an archive operation goes through the Logic component:
+
+<puml src="diagrams/ArchiveSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the archive command" />
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `ArchiveCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
-</box>
+**Note:** The lifeline for ArchiveCommandParser should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
+</box>
 
 Similarly, how an archive operation goes through the Model component is shown below:
 
 <puml src="diagrams/ArchiveSequenceDiagram-Model.puml" width="420" />
 
-The unarchive command does the opposite. It calls Model#unarchivePerson(personToUnarchive), which updates the selected person’s archive state back to false.
+The unarchive command does the opposite. It calls unarchivePerson(person), which restores the selected person to active state.
 
 <box type="info" seamless>
 
-Note: list-archive filtering is handled by the command layer via Model#updateFilteredPersonList(p -> p.isArchived()), not inside Model#archivePerson(...).
+**Note:** If the selected index is invalid, the command returns an error instead of modifying data.
+**Note:** list-archive filtering is applied through updateFilteredPersonList(predicate), not inside archivePerson(...).
 
 </box>
 
-#### Why This Design
+#### Design considerations
 
-- Archiving is non-destructive, so no contact data is lost.
-- It is simple to implement because no separate archived database is required.
-- It keeps behavior predictable: archived contacts are hidden from the default list but can still be recovered.
+Aspect: How archived data is represented
 
-#### Design Considerations
+1. Alternative 1 (current choice): Keep an archive flag in each Person.
+   - Pros: Minimal structural changes, straightforward persistence, low implementation overhead.
+   - Cons: Filtering predicates must be applied consistently across commands.
 
-Aspect: How to represent archived contacts
+2. Alternative 2: Move archived persons into a separate collection.
+   - Pros: Strong conceptual separation between active and archived contacts.
+   - Cons: Higher complexity for edit, find, delete, indexing, and synchronization logic.
 
-1. Alternative 1 (current choice): Keep an archive flag in each person.
-- Pros: Minimal structural changes, easy JSON persistence, low implementation overhead.
-- Cons: Filtering logic must consistently exclude archived records in active views.
-
-2. Alternative 2: Move archived contacts into a separate collection.
-- Pros: Strong separation between active and archived data.
-- Cons: Higher complexity for edit, find, delete, and synchronization logic.
-
-#### Current Behavior Summary
-
-- Archive does not delete contact data.
-- Default list shows non-archived contacts.
-- list-archive shows archived contacts.
-- unarchive returns a contact to the default active list.
-_{more aspects and alternatives to be added}_
+{more aspects and alternatives to be added}
 
 ### \[Proposed\] Data archiving
 
