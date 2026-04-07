@@ -215,6 +215,17 @@ The unarchive command does the opposite. It calls unarchivePerson(person), which
 
 </box>
 
+The following activity diagram summarizes what happens when a user executes the archive command:
+
+<puml src="diagrams/ArchiveActivityDiagram.puml" width="420" />
+
+<box type="info" seamless>
+
+**Note:** If the command returns an error (for example invalid index), no data is modified.
+**Note:** After successful command execution, Logic persists the current address book through Storage.
+
+</box>
+
 #### Design considerations
 
 Aspect: How archived data is represented
