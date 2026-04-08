@@ -664,7 +664,7 @@ Expected:
 !!**Negative Test Case 1: Add duplicate contact**!!
 
 Steps:
-1. Run `add n/Alicia p/80015678 e/alicia@example.com a/Alicia street, block 123, #01-01`.
+1. Run `add n/Alicia p/80015678 e/alicia@example.com a/Alicia street, block 123, #01-01`
 2. Run the same command again.
 
 Expected:
@@ -677,7 +677,7 @@ Steps:
 1. Run `add n/Bob- p/92225430 e/bob@example.com a/Bob street, block 123, #01-01`
 
 Expected:
-- Command fails with message: `Names should only contain alphanumeric characters and spaces, should not be blank, and must be at most 80 characters long`
+- Command fails with message: `Names should only contain alphanumeric characters...`
 
 !!**Negative Test Case 3: Invalid phone**!!
 
@@ -685,7 +685,7 @@ Steps:
 1. Run `add n/Bob p/+-- e/bob@example.com a/Bob street, block 123, #01-01`
 
 Expected:
-- Command fails with message: `Phone numbers should be at most 15 characters, contain only digits, plus (+), spaces, or hyphens (-), and include at least one digit.`
+- Command fails with message: `Phone numbers should be at most 15 characters...`
 
 !!**Negative Test Case 4: Invalid email**!!
 
@@ -693,7 +693,7 @@ Steps:
 1. Run `add n/Bob p/91234567 e/bemail a/Bob street, block 123, #01-01`
 
 Expected:
-- Command fails with message: `Emails should be of the format local-part@domain and adhere to the following constraints...` (multiline email validation message)
+- Command fails with message: `Emails should be of the format local-part@domain...`
 
 !!**Negative Test Case 5: Invalid address**!!
 
@@ -701,7 +701,7 @@ Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street/block123`
 
 Expected:
-- Command fails with message: `Addresses should not be blank, must be at most 120 characters, and may only contain alphanumeric characters, spaces, commas, periods, apostrophes, parentheses, hyphens, and hashtags`
+- Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
 
 !!**Negative Test Case 6: Invalid note**!!
 
@@ -709,7 +709,7 @@ Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 nt/notes+-`
 
 Expected:
-- Command fails with message: `Notes should be up to 150 characters and contain only alphanumeric characters, spaces, commas, and full stops`
+- Command fails with message: `Notes should be up to 150 characters and contain only alphanumeric...`
 
 !!**Negative Test Case 7: Invalid visit date**!!
 
@@ -717,15 +717,15 @@ Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-32 12:00`
 
 Expected:
-- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm (e.g., 2026-03-15 14:30)`
+- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm...`
 
 !!**Negative Test Case 8: Invalid visit time**!!
 
 Steps:
-1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-01 24:00`
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-01 25:00`
 
 Expected:
-- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm (e.g., 2026-03-15 14:30)`
+- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm...`
 
 !!**Negative Test Case 9: Invalid tag**!!
 
@@ -773,7 +773,7 @@ Steps:
 1. Run `archive a`
 
 Expected:
-- Command fails with message: `Invalid command format! Usage: archive INDEX`
+- Command fails with message: `Invalid command format! archive: Archives the contact...`
 
 !!**Negative Test Case 2: Out-of-range index**!!
 
@@ -781,7 +781,7 @@ Steps:
 1. Run `archive 999`
 
 Expected:
-- Command fails with message: `The contact index provided is invalid.`
+- Command fails with message: `The contact index provided is invalid`
 
 ### Listing all unarchived contacts : `list`
 
@@ -827,7 +827,7 @@ Steps:
 1. Run `list abc`
 
 Expected:
-- Command fails with message: `Invalid command format! Usage: list [s/SORT_FIELD]`
+- Command fails with message: `Invalid command format! list: Lists all contacts...`
 
 ### Listing all archived contacts : `list-archive`
 
@@ -896,7 +896,7 @@ Steps:
 1. Run `edit 999 p/91234567`
 
 Expected:
-- Command fails with message: `The contact index provided is invalid.`
+- Command fails with message: `The contact index provided is invalid`
 
 !!**Negative Test Case 3: Invalid phone**!!
 
@@ -904,7 +904,7 @@ Steps:
 1. Run `edit 1 p/911a`
 
 Expected:
-- Command fails with message: `Phone numbers should be at most 15 characters, contain only digits, plus (+), spaces, or hyphens (-), and include at least one digit.`
+- Command fails with message: `Phone numbers should be at most 15 characters...`
 
 !!**Negative Test Case 4: Invalid address**!!
 
@@ -912,7 +912,7 @@ Steps:
 1. Run `edit 1 a/Bob street/block123`
 
 Expected:
-- Command fails with message: `Addresses should not be blank, must be at most 120 characters, and may only contain alphanumeric characters, spaces, commas, periods, apostrophes, parentheses, hyphens, and hashtags`
+- Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
 
 !!**Negative Test Case 5: Duplicate tag values**!!
 
@@ -920,7 +920,7 @@ Steps:
 1. Run `edit 1 t/friend t/Friend`
 
 Expected:
-- Command fails with message: `Multiple tags with the same name provided.`
+- Command fails with message: `Duplicate tags detected! Tag names are case-insensitive`
 
 ### Locating contacts by specified field: `find`
 
@@ -1021,7 +1021,7 @@ Steps:
 1. Run `note 1`
 
 Expected:
-- Command fails with message: `Invalid command format! Usage: note INDEX nt/NOTE`
+- Command fails with message: `Inote: Edits the note of the contact...`
 
 !!**Negative Test Case 2: Invalid index**!!
 
@@ -1079,7 +1079,7 @@ Steps:
 2. Run `tag 1 at/friends`
 
 Expected:
-- Command fails with message: `This tag already exists in the contact.`
+- Command fails with message: `The tag [friends] already exists for this person.`
 
 !!**Negative Test Case 3: Delete non-existent tag**!!
 
@@ -1087,7 +1087,7 @@ Steps:
 1. Run `tag 1 dt/notpresent`
 
 Expected:
-- Command fails with message: `This tag does not exist in the contact.`
+- Command fails with message: `The tag [notpresent] does not exist, cannot be deleted.`
 
 ### Deleting contact(s) : `delete`
 
@@ -1151,7 +1151,7 @@ Steps:
 1. Run `delete 1-150`
 
 Expected:
-- Command fails with message: `Range too large. A range can include at most 100 indices (inclusive of both start and end).`
+- Command fails with message: `Range too large. A range can include at most 100 indices...`
 
 !!**Negative Test Case 5: Index specified in range is too large**!!
 
@@ -1199,7 +1199,7 @@ Steps:
 1. Run `unarchive abc`
 
 Expected:
-- Command fails with message: `Invalid command format! Usage: unarchive INDEX`
+- Command fails with message: `Invalid command format! unarchive: Unarchives the contact...`
 
 !!**Negative Test Case 2: Out-of-range index**!!
 
@@ -1207,7 +1207,7 @@ Steps:
 1. Run `unarchive 999`
 
 Expected:
-- Command fails with message: `The contact index provided is invalid.`
+- Command fails with message: `The contact index provided is invalid`
 
 ### Clearing all entries : `clear`
 
