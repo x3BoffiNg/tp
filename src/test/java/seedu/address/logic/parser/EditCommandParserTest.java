@@ -129,7 +129,7 @@ public class EditCommandParserTest {
         // EP: All fields specified together parse successfully
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + PHONE_DESC_BOB + TAG_DESC_HUSBAND
-            + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + NAME_DESC_AMY + NOTE_DESC_AMY + VISIT_DESC_BOB + TAG_DESC_FRIEND;
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + NAME_DESC_AMY + NOTE_DESC_AMY + VISIT_DESC_BOB + TAG_DESC_FRIEND;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
@@ -156,6 +156,7 @@ public class EditCommandParserTest {
     @Test
     public void parse_oneFieldSpecified_success() {
         // BV: Minimum valid field count is 1; each field type is tested individually
+
         // name
         Index targetIndex = INDEX_THIRD_PERSON;
         String userInput = targetIndex.getOneBased() + NAME_DESC_AMY;
@@ -221,8 +222,8 @@ public class EditCommandParserTest {
         // EP: Multiple valid fields repeated are all detected
         userInput = targetIndex.getOneBased() + PHONE_DESC_AMY + ADDRESS_DESC_AMY + EMAIL_DESC_AMY
                 + TAG_DESC_FRIEND + PHONE_DESC_AMY + ADDRESS_DESC_AMY + EMAIL_DESC_AMY + TAG_DESC_FRIEND
-            + PHONE_DESC_BOB + ADDRESS_DESC_BOB + EMAIL_DESC_BOB + NOTE_DESC_AMY + NOTE_DESC_AMY
-            + VISIT_DESC_BOB + VISIT_DESC_BOB + TAG_DESC_HUSBAND;
+                + PHONE_DESC_BOB + ADDRESS_DESC_BOB + EMAIL_DESC_BOB + NOTE_DESC_AMY + NOTE_DESC_AMY
+                + VISIT_DESC_BOB + VISIT_DESC_BOB + TAG_DESC_HUSBAND;
 
         assertParseFailure(parser, userInput,
             Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
