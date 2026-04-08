@@ -611,7 +611,7 @@ Expected:
 !!**Positive Test Case 2: Run the help command with existing help window**!!
 
 Steps:
-1. Run `help`.
+1. Run `help`
 2. Minimise the help window.
 3. Run `help` again.
 
@@ -904,7 +904,7 @@ Steps:
 1. Run `edit 1 p/911a`
 
 Expected:
-- Command fails with message: `Phone numbers should be an 8-digit local number starting with 6, 8, or 9 (spaces or hyphens allowed as XXXX XXXX or XXXX-XXXX), a toll-free number in the format 1800 XXX XXXX, 1800-XXX-XXXX, or 1800XXXXXXX, or a valid emergency number (995, 999, 1700).`
+- Command fails with message: `Phone numbers should be at most 15 characters, contain only digits, plus (+), spaces, or hyphens (-), and include at least one digit.`
 
 !!**Negative Test Case 4: Invalid address**!!
 
