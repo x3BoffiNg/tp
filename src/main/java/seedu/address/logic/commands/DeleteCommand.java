@@ -22,14 +22,14 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes one or more persons by index.\n"
+            + ": Deletes one or more contacts by index.\n"
             + "Parameters: INDEX or RANGE (must be a positive integer)\n"
             + "Example: delete 1\n"
             + "Example: delete 3-7\n"
             + "Example: delete 1 3-7 10";
 
 
-    public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted persons:\n%1$s";
+    public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted contact(s):\n%1$s";
 
     private final List<Index> targetIndexes;
 

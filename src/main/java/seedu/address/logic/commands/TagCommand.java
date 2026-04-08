@@ -24,8 +24,8 @@ public class TagCommand extends Command {
 
     public static final String COMMAND_WORD = "tag";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits tag(s) of the person identified "
-            + "by the index number used in the person list. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits tag(s) of the contact identified "
+            + "by the index number used in the displayed contact list. "
             + "Cannot add duplicate tag or delete non-existent tag.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_ADD_TAG + "TAG_TO_ADD]... "
@@ -34,7 +34,7 @@ public class TagCommand extends Command {
             + PREFIX_ADD_TAG + "neighbour "
             + PREFIX_DELETE_TAG + "friend";
 
-    public static final String MESSAGE_TAG_PERSON_SUCCESS = "Updated tags for Person: %1$s";
+    public static final String MESSAGE_TAG_PERSON_SUCCESS = "Updated tags for Contact: %1$s";
     public static final String MESSAGE_NOT_EDITED = "Tag to add or delete must be provided.";
 
     private final Index index;

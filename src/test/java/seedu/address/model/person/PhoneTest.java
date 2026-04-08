@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 
 public class PhoneTest {
 
+    private static final String VALID_MAX_LENGTH_PHONE = "+123 456-789 01";
+    private static final String INVALID_OVER_MAX_LENGTH_PHONE = "+123 456-789 012";
+
     @Test
     public void constructor_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new Phone(null));
@@ -24,34 +27,22 @@ public class PhoneTest {
         // null phone number
         assertThrows(NullPointerException.class, () -> Phone.isValidPhone(null));
 
-        // Equivalent Partitioning (invalid): wrong length, invalid prefix, non-digit, malformed spacing
-        // invalid phone numbers
+        // Equivalent Partitioning (invalid): blank, over max length, disallowed chars, no digit
         assertFalse(Phone.isValidPhone("")); // empty string
         assertFalse(Phone.isValidPhone(" ")); // spaces only
-        assertFalse(Phone.isValidPhone("91")); // too short
-        assertFalse(Phone.isValidPhone("71234567")); // does not start with 6, 8, or 9
-        assertFalse(Phone.isValidPhone("phone")); // non-numeric
-        assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidPhone("93 121534")); // malformed local spacing
-        assertFalse(Phone.isValidPhone("93-121534")); // malformed local hyphenation
-        assertFalse(Phone.isValidPhone("1800 12 3456")); // malformed toll-free group sizes
-        assertFalse(Phone.isValidPhone("1800 1234567")); // malformed toll-free spacing
+        assertFalse(Phone.isValidPhone("+--")); // allowed symbols only, but no digit
+        assertFalse(Phone.isValidPhone(INVALID_OVER_MAX_LENGTH_PHONE)); // exceeds max length
+        assertFalse(Phone.isValidPhone("+65(9123)4567")); // parentheses are not allowed
+        assertFalse(Phone.isValidPhone("1234/5678")); // slash is not allowed
 
-        // Equivalent Partitioning (valid): local, spaced local, landline, emergency, and toll-free formats
-        // valid phone numbers
+        // Equivalent Partitioning (valid): only allowed chars, with at least one digit, within max length
+        assertTrue(Phone.isValidPhone("91"));
         assertTrue(Phone.isValidPhone("93121534"));
-        assertTrue(Phone.isValidPhone("81234567"));
-        assertTrue(Phone.isValidPhone("61234567"));
-        assertTrue(Phone.isValidPhone("9123 4567"));
-        assertTrue(Phone.isValidPhone("6123 4567"));
-        assertTrue(Phone.isValidPhone("995"));
-        assertTrue(Phone.isValidPhone("9123-4567"));
-        assertTrue(Phone.isValidPhone("999"));
-        assertTrue(Phone.isValidPhone("6123-4567"));
-        assertTrue(Phone.isValidPhone("1700"));
+        assertTrue(Phone.isValidPhone("+65 9123-4567"));
         assertTrue(Phone.isValidPhone("1800 123 4567"));
-        assertTrue(Phone.isValidPhone("1800-123-4567"));
-        assertTrue(Phone.isValidPhone("18001234567"));
+
+        // Boundary Value Analysis: exactly max length should be accepted
+        assertTrue(Phone.isValidPhone(VALID_MAX_LENGTH_PHONE));
     }
 
     @Test

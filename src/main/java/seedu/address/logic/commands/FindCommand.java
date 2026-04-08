@@ -23,7 +23,7 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose attributes contain any of "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all contact(s) whose attributes contain any of "
             + "the specified keywords or dates and displays them as a list with index numbers.\n"
             + "Parameters: \n"
             + "1. " + PREFIX_NAME + "NAME [ADDITIONAL NAMES] \n"

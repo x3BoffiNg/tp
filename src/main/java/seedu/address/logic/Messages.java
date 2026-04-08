@@ -14,8 +14,8 @@ public class Messages {
 
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
-    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
+    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The contact index provided is invalid";
+    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d contact(s) listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
             "Multiple values provided for the same field. Each field should only be specified once: ";
     public static final String MESSAGE_INVALID_INDEX =
@@ -37,7 +37,7 @@ public class Messages {
             "Range too large. A range can include at most 100 indices (inclusive of both start and end).";
 
     public static final String MESSAGE_NONEXISTENCE_INDEX =
-            "Invalid indices: %1$s.\nPerson does not exist in current list.";
+            "Invalid indices: %1$s.\nContact does not exist in current list.";
 
     public static final String MESSAGE_DUPLICATE_TAGS = "Duplicate tags detected! Tag names are case-insensitive";
 

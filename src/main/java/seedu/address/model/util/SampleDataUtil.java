@@ -76,7 +76,7 @@ public class SampleDataUtil {
                     new Phone("95678901"),
                     new Email("siewlan@example.com"),
                     new Address("Blk 45 Toa Payoh Lorong 5, #10-22"),
-                    new Note("Client requiring medical follow-ups."),
+                    new Note("Client requiring medical follow ups."),
                     getTagSet("caseid3", "client"),
                     new VisitDateTime("2026-04-15 14:00"),
                     false
