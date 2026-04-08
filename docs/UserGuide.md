@@ -21,8 +21,8 @@ CareSync is **optimized for use via a Line Interface** (CLI) while still having 
     - [Viewing help : `help`](#viewing-help--help)
     - [Adding a contact: `add`](#adding-a-contact-add)
     - [Archiving a contact : `archive`](#archiving-a-contact--archive)
-    - [Listing all contacts : `list`](#listing-all-contacts--list)
-    - [Listing archived contacts : `list-archive`](#listing-archived-contacts--list-archive)
+    - [Listing all unarchived contacts : `list`](#listing-all-unarchived-contacts--list)
+    - [Listing all archived contacts : `list-archive`](#listing-all-archived-contacts--list-archive)
     - [Editing a contact : `edit`](#editing-a-contact--edit)
     - [Locating contacts by specified field: `find`](#locating-contacts-by-specified-field-find)
     - [Adding note to a contact : `note`](#adding-note-to-a-contact--note)
@@ -170,7 +170,7 @@ Examples:
 
 ![archive](images/ug_archive.png)
 
-### Listing all contacts : `list`
+### Listing all unarchived contacts : `list`
 
 Shows a list of all **unarchived** contacts in CareSync.  
 Optionally, the list can be **sorted by a specified field**.
@@ -203,7 +203,7 @@ Examples:
 
 ![list](images/ug_list.png)
 
-### Listing archived contacts : `list-archive`
+### Listing all archived contacts : `list-archive`
 
 Shows a list of all **archived** contacts in CareSync.
 
