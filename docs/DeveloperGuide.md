@@ -565,6 +565,13 @@ testers are expected to do more *exploratory* testing.
 
 </box>
 
+### Manual testing conventions
+
+- Detailed command syntax, parameter constraints, and usage examples are documented in the [User Guide](UserGuide.md) under each command section
+- DG manual tests focus on behavior verification (state change, list update, and error handling), not re-explaining command format
+- For commands using `INDEX`, run `list` first (or `list-archive` for `unarchive`) unless the test case explicitly requires a filtered list
+- Where a negative test lists a message, verify the exact message shown in the result box
+
 ### Launch and shutdown
 
 !!**Initial launch**!!
@@ -587,10 +594,11 @@ Steps:
 Expected:
 - The most recent window size and location is retained.
 
-### Viewing help
+### Viewing help : `help`
 
 *Prerequisites:*
 - CareSync is running.
+- Refer to [User Guide: Viewing help](UserGuide.md#viewing-help--help) for command usage
 
 !!**Positive Test Case 1: Run the help command**!!
 
@@ -608,9 +616,9 @@ Steps:
 3. Run `help` again.
 
 Expected:
-- Exisiting help window is focused.
+- Existing help window is focused.
 
-!!**Positive Test Case 3: Run the help command with unknown parameters**!!
+!!**Positive Test Case 3: Run help with extra parameters**!!
 
 Steps:
 1. Run `help 123`
@@ -618,122 +626,718 @@ Steps:
 Expected:
 - Help window opens.
 
-### Adding a contact
+### Adding a contact: `add`
 
 *Prerequisites:*
 - CareSync is running.
-- List all contacts using the `list` command.
+- Run `list` to see the current contact list.
+- Refer to [User Guide: Adding a contact](UserGuide.md#adding-a-contact-add) for full field rules
 
-!!**Positive Test Case 1: Adding with only compulsory fields**!!
+!!**Positive Test Case 1: Add with compulsory fields only**!!
 
 Steps:
 1. Run `add n/Hugo p/96543218 e/hugo@example.com a/Hugo street, block 123, #01-01`
 
 Expected:
-- Message: `New contact added: Hugo; Phone: ...`
-- Contact is added to the list.
-- Contact information is as specified.
-- List index increases accordingly.
+- Message: `New contact added: ...`
+- Contact is added to the list with the specified values.
 
-!!**Positive Test Case 2: Adding with all fields**!!
+!!**Positive Test Case 2: Add with all fields**!!
 
 Steps:
-1. Run `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00 t/caseid6`
+1. Run `add n/John Doe p/+65 9876-5432 e/johnd@example.com a/John street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00 t/caseid6`
 
 Expected:
-- Message: `New contact added: John Doe; Phone: ...`
-- Contact is added to the list.
-- Contact information is as specified.
-- List index increases accordingly.
+- Message: `New contact added: ...`
+- Contact is added with optional fields populated.
 
-!!**Positive Test Case 3: Adding with duplicate fields (except name)**!!
+!!**Positive Test Case 3: Add contacts with duplicate non-name fields**!!
 
 Steps:
-1. Run `add n/Alice1 p/88883333 e/alice@example.com a/Alice street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00 t/caseid6`
-2. Run `add n/Alice2 p/88883333 e/alice@example.com a/Alice street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00 t/caseid6`
+1. Run `add n/Alice One p/88883333 e/alice@example.com a/Alice street, block 123, #01-01`
+2. Run `add n/Alice Two p/88883333 e/alice@example.com a/Alice street, block 123, #01-01`
 
 Expected:
-- Message: `New contact added: Alice1; Phone: ...`
-- `Alice1` is added to the list.
-- Message: `New contact added: Alice2; Phone: ...`
-- `Alice2` is added to the list.
-- Contact information are as specified.
-- List index increases accordingly.
+- Both commands succeed.
+- Both contacts are present in the list.
 
-!!**Negative Test Case 1: Adding with duplicate name**!!
+!!**Negative Test Case 1: Add duplicate contact**!!
 
 Steps:
 1. Run `add n/Alicia p/80015678 e/alicia@example.com a/Alicia street, block 123, #01-01`
-1. Run the same command again.
+2. Run the same command again.
 
 Expected:
-- Message: `This contact already exists in the address book`
-- No contact is added.
+- Second command fails with message: `This contact already exists in the address book.`
+- No duplicate contact is added.
 
-!!**Negative Test Case 2: Adding with invalid name**!!
+!!**Negative Test Case 2: Invalid name**!!
 
 Steps:
 1. Run `add n/Bob- p/92225430 e/bob@example.com a/Bob street, block 123, #01-01`
 
 Expected:
-- Message: `Names should only contain alphanumeric characters ...`
-- No contact is added.
+- Command fails with message: `Names should only contain alphanumeric characters...`
 
-!!**Negative Test Case 3: Adding with invalid phone**!!
+!!**Negative Test Case 3: Invalid phone**!!
 
 Steps:
-1. Run `add n/Bob p/123 e/bob@example.com a/Bob street, block 123, #01-01`
+1. Run `add n/Bob p/+-- e/bob@example.com a/Bob street, block 123, #01-01`
 
 Expected:
-- Message: `Phone numbers should be an ...`
-- No contact is added.
+- Command fails with message: `Phone numbers should be at most 15 characters...`
 
-!!**Negative Test Case 4: Adding with invalid email**!!
+!!**Negative Test Case 4: Invalid email**!!
 
 Steps:
 1. Run `add n/Bob p/91234567 e/bemail a/Bob street, block 123, #01-01`
 
 Expected:
-- Message: `Emails should be of the format ...`
-- No contact is added.
+- Command fails with message: `Emails should be of the format local-part@domain...`
 
-!!**Negative Test Case 5: Adding with invalid address**!!
+!!**Negative Test Case 5: Invalid address**!!
 
 Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street/block123`
 
 Expected:
-- Message: `Addresses should not be blank ...`
-- No contact is added.
+- Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
 
-!!**Negative Test Case 6: Adding with invalid note**!!
+!!**Negative Test Case 6: Invalid note**!!
 
 Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 nt/notes+-`
 
 Expected:
-- Message: `Notes should be up to ...`
-- No contact is added.
+- Command fails with message: `Notes should be up to 150 characters and contain only alphanumeric...`
 
-!!**Negative Test Case 7: Adding with invalid visit date and time**!!
+!!**Negative Test Case 7: Invalid visit date**!!
 
 Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-32 12:00`
 
 Expected:
-- Message: `Visit date and time must be a valid ...`
-- No contact is added.
+- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm...`
 
-!!**Negative Test Case 8: Adding with invalid tag**!!
+!!**Negative Test Case 8: Invalid visit time**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-01 25:00`
+
+Expected:
+- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm...`
+
+!!**Negative Test Case 9: Invalid tag**!!
 
 Steps:
 1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/fr!end`
 
 Expected:
-- Message: `Tag names should be alphanumeric ...`
-- No contact is added.
+- Command fails with message: `Tag names should be alphanumeric and at most 15 characters long`
+
+!!**Negative Test Case 10: Duplicate tag values**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/friend t/Friend`
+
+Expected:
+- Command fails with message: `Duplicate tags detected! Tag names are case-insensitive`
+
+### Archiving a contact : `archive`
+
+*Prerequisites:*
+- At least one visible contact exists in the current list.
+- Run `list` before each INDEX-based test unless the test case intentionally uses a filtered list.
+- Refer to [User Guide: Archiving a contact](UserGuide.md#archiving-a-contact--archive) for command usage
+
+!!**Positive Test Case 1: Archive by valid index**!!
+
+Steps:
+1. Run `archive 1`
+
+Expected:
+- Command succeeds with `Archived: ...` message.
+
+!!**Positive Test Case 2: Archive from filtered result**!!
+
+Steps:
+1. Run `find n/Alex`
+2. Run `archive 1`
+
+Expected:
+- The first displayed contact in filtered results is archived.
+
+!!**Negative Test Case 1: Invalid index format**!!
+
+Steps:
+1. Run `archive a`
+
+Expected:
+- Command fails with message: `Invalid command format! archive: Archives the contact...`
+
+!!**Negative Test Case 2: Out-of-range index**!!
+
+Steps:
+1. Run `archive 999`
+
+Expected:
+- Command fails with message: `The contact index provided is invalid`
+
+### Listing all unarchived contacts : `list`
+
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Listing all unarchived contacts](UserGuide.md#listing-all-unarchived-contacts--list) for sorting behavior details
+
+!!**Positive Test Case 1: List without sorting**!!
+
+Steps:
+1. Run `list`
+
+Expected:
+- All contacts are displayed.
+
+!!**Positive Test Case 2: List sorted by name**!!
+
+Steps:
+1. Run `list s/name`
+
+Expected:
+- All contacts are displayed sorted by name.
+
+!!**Positive Test Case 3: List sorted by visit**!!
+
+Steps:
+1. Run `list s/visit`
+
+Expected:
+- All contacts are displayed sorted by visit date/time.
+
+!!**Negative Test Case 1: Invalid sort field**!!
+
+Steps:
+1. Run `list s/phone`
+
+Expected:
+- Command fails with message: `Invalid sort field. Valid options are: name, visit`
+
+!!**Negative Test Case 2: Unexpected preamble token**!!
+
+Steps:
+1. Run `list abc`
+
+Expected:
+- Command fails with message: `Invalid command format! list: Lists all contacts...`
+
+### Listing all archived contacts : `list-archive`
+
+*Prerequisites:*
+- At least one archived contact exists (optional, for non-empty results).
+- Refer to [User Guide: Listing all archived contacts](UserGuide.md#listing-all-archived-contacts--list-archive) for command usage
+
+!!**Positive Test Case 1: List archived contacts**!!
+
+Steps:
+1. Run `list-archive`
+
+Expected:
+- Only archived contacts are shown.
+
+!!**Positive Test Case 2: Run with extra text**!!
+
+Steps:
+1. Run `list-archive 123`
+
+Expected:
+- Command still works and shows archived contacts.
+
+### Editing a contact : `edit`
+
+*Prerequisites:*
+- At least one contact exists in current displayed list.
+- Run `list` before each INDEX-based test case.
+- Refer to [User Guide: Editing a contact](UserGuide.md#editing-a-contact--edit) for field behavior (including tag replacement via `t/`)
+
+!!**Positive Test Case 1: Edit one field**!!
+
+Steps:
+1. Run `edit 1 p/91234567`
+
+Expected:
+- Command succeeds and phone for contact 1 is updated.
+
+!!**Positive Test Case 2: Edit multiple fields**!!
+
+Steps:
+1. Run `edit 1 e/newmail@example.com a/12-34, Sample Road #01-01`
+
+Expected:
+- Command succeeds and both fields are updated.
+
+!!**Positive Test Case 3: Clear tags using `t/`**!!
+
+Steps:
+1. Run `edit 1 t/`
+
+Expected:
+- Command succeeds and tags for contact 1 are cleared.
+
+!!**Negative Test Case 1: No fields supplied**!!
+
+Steps:
+1. Run `edit 1`
+
+Expected:
+- Command fails with message: `At least one field to edit must be provided.`
+
+!!**Negative Test Case 2: Invalid index**!!
+
+Steps:
+1. Run `edit 999 p/91234567`
+
+Expected:
+- Command fails with message: `The contact index provided is invalid`
+
+!!**Negative Test Case 3: Invalid phone**!!
+
+Steps:
+1. Run `edit 1 p/911a`
+
+Expected:
+- Command fails with message: `Phone numbers should be at most 15 characters...`
+
+!!**Negative Test Case 4: Invalid address**!!
+
+Steps:
+1. Run `edit 1 a/Bob street/block123`
+
+Expected:
+- Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
+
+!!**Negative Test Case 5: Duplicate tag values**!!
+
+Steps:
+1. Run `edit 1 t/friend t/Friend`
+
+Expected:
+- Command fails with message: `Duplicate tags detected! Tag names are case-insensitive`
+
+### Locating contacts by specified field: `find`
+
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Locating contacts by specified field](UserGuide.md#locating-contacts-by-specified-field-find) for single-mode and prefix rules
+
+!!**Positive Test Case 1: Find by name keywords**!!
+
+Steps:
+1. Run `find n/Alex David`
+
+Expected:
+- Contacts with any part of their name starting with `Alex` or `David` (case-insensitive) are shown.
+
+!!**Positive Test Case 2: Find by tag**!!
+
+Steps:
+1. Run `find t/friends`
+
+Expected:
+- Contacts with tag(s) starting with `friends` (case-insensitive) are shown.
+
+!!**Positive Test Case 3: Find by specific date**!!
+
+Steps:
+1. Run `find d/2026-12-01`
+
+Expected:
+- Contacts with visit date on 2026-12-01 are shown.
+
+!!**Positive Test Case 4: Find by today keyword**!!
+
+Steps:
+1. Run `find d/today`
+
+Expected:
+- Contacts with visit date on today are shown.
+
+!!**Positive Test Case 5: Find by date range**!!
+
+Steps:
+1. Run `find sd/2026-01-01 ed/2026-12-31`
+
+Expected:
+- Contacts with visit dates in range are shown.
+
+!!**Negative Test Case 1: Mixed modes in one command**!!
+
+Steps:
+1. Run `find n/Alex t/friends`
+
+Expected:
+- Command fails with message: `Only one search type allowed.`
+
+!!**Negative Test Case 2: Missing date range pair**!!
+
+Steps:
+1. Run `find sd/2026-01-01`
+
+Expected:
+- Command fails with message: `Both sd/ and ed/ must be provided together.`
+
+!!**Negative Test Case 3: Invalid date range order**!!
+
+Steps:
+1. Run `find sd/2026-12-31 ed/2026-01-01`
+
+Expected:
+- Command fails with message: `Start date cannot be after end date!`
+
+### Adding note to a contact : `note`
+
+*Prerequisites:*
+- At least one contact exists in current displayed list.
+- Run `list` before each INDEX-based test case.
+- Refer to [User Guide: Adding note to a contact](UserGuide.md#adding-note-to-a-contact--note) for note semantics
+
+!!**Positive Test Case 1: Add/replace note**!!
+
+Steps:
+1. Run `note 1 nt/Requires wheelchair assistance`
+
+Expected:
+- Command succeeds and note is updated for contact 1.
+
+!!**Positive Test Case 2: Clear note**!!
+
+Steps:
+1. Run `note 1 nt/`
+
+Expected:
+- Command succeeds and note is cleared for contact 1.
+
+!!**Negative Test Case 1: Missing note prefix**!!
+
+Steps:
+1. Run `note 1`
+
+Expected:
+- Command fails with message: `Inote: Edits the note of the contact...`
+
+!!**Negative Test Case 2: Invalid index**!!
+
+Steps:
+1. Run `note -1 nt/Follow up`
+
+Expected:
+- Command fails with message: `Invalid index. Index must be a non-zero positive number (1, 2, 3...).`
+
+### Managing tags for a contact : `tag`
+
+*Prerequisites:*
+- At least one contact exists.
+- Run `list` before each INDEX-based test case.
+- Refer to [User Guide: Managing tags for a contact](UserGuide.md#managing-tags-for-a-contact--tag) for `at/` and `dt/` behavior
+
+!!**Positive Test Case 1: Add one tag**!!
+
+Steps:
+1. Run `tag 1 at/client`
+
+Expected:
+- Command succeeds and `client` tag is added.
+
+!!**Positive Test Case 2: Delete one tag**!!
+
+Steps:
+1. Ensure contact 1 has `client` tag.
+2. Run `tag 1 dt/client`
+
+Expected:
+- Command succeeds and `client` tag is removed.
+
+!!**Positive Test Case 3: Add and delete in one command**!!
+
+Steps:
+1. Ensure contact 1 has `friend` tag.
+1. Run `tag 1 at/family dt/friend`
+
+Expected:
+- Command succeeds and both tag updates are applied.
+
+!!**Negative Test Case 1: No `at/` and `dt/` provided**!!
+
+Steps:
+1. Run `tag 1`
+
+Expected:
+- Command fails with message: `Tag to add or delete must be provided.`
+
+!!**Negative Test Case 2: Add existing tag**!!
+
+Steps:
+1. Ensure contact 1 already has `friends`
+2. Run `tag 1 at/friends`
+
+Expected:
+- Command fails with message: `The tag [friends] already exists for this person.`
+
+!!**Negative Test Case 3: Delete non-existent tag**!!
+
+Steps:
+1. Run `tag 1 dt/notpresent`
+
+Expected:
+- Command fails with message: `The tag [notpresent] does not exist, cannot be deleted.`
+
+### Deleting contact(s) : `delete`
+
+*Prerequisites:*
+- At least 5 contacts exist.
+- Run `list` before each INDEX-based test case.
+- There are fewer than 999 contacts.
+- Refer to [User Guide: Deleting contacts](UserGuide.md#deleting-contacts--delete) for index/range syntax rules
+
+!!**Positive Test Case 1: Delete single index**!!
+
+Steps:
+1. Run `delete 2`
+
+Expected:
+- Contact at index 2 is removed.
+
+!!**Positive Test Case 2: Delete multiple indexes and range**!!
+
+Steps:
+1. Run `delete 1 3-4 5`
+
+Expected:
+- All specified contacts are deleted in one command.
+
+!!**Positive Test Case 3: Duplicate indexes are ignored**!!
+
+Steps:
+1. Run `delete 2 2 2-2`
+
+Expected:
+- Contact 2 is deleted once without errors.
+
+!!**Negative Test Case 1: Descending range**!!
+
+Steps:
+1. Run `delete 5-2`
+
+Expected:
+- Command fails with message: `Invalid range: start index must be less than or equal to end index.`
+
+!!**Negative Test Case 2: Out-of-range index in bulk delete**!!
+
+Steps:
+1. Run `delete 1 999`
+
+Expected:
+- Command fails with message: `Invalid indices: 999. Contact does not exist in current list.`
+
+!!**Negative Test Case 3: Invalid token**!!
+
+Steps:
+1. Run `delete a`
+
+Expected:
+- Command fails with message: `Invalid input. Only numbers and ranges like 1 or 3-5 are allowed.`
+
+!!**Negative Test Case 4: Range too large**!!
+
+Steps:
+1. Run `delete 1-150`
+
+Expected:
+- Command fails with message: `Range too large. A range can include at most 100 indices...`
+
+!!**Negative Test Case 5: Index specified in range is too large**!!
+
+Steps:
+1. Run `delete 19999999999-20000000000`
+
+Expected:
+- Command fails with message: `Index specified for range is too large. Please specify a smaller index.`
+
+!!**Negative Test Case 6: Invalid index**!!
+
+Steps:
+1. Run `delete -1`
+
+Expected:
+- Command fails with message: `Invalid index. Index must be a non-zero positive number (1, 2, 3...).`
+
+!!**Negative Test Case 7: Index too large**!!
+
+Steps:
+1. Run `delete 10000000000`
+
+Expected:
+- Command fails with message: `Index too large. Please specify a valid index.`
+
+### Unarchiving a contact : `unarchive`
+
+*Prerequisites:*
+- At least one archived contact exists for positive flow.
+- Run `list-archive` before each INDEX-based test case.
+- There are fewer than 999 archived contacts.
+- Refer to [User Guide: Unarchiving a contact](UserGuide.md#unarchiving-a-contact--unarchive) for command usage
+
+!!**Positive Test Case 1: Unarchive from archived list**!!
+
+Steps:
+1. Run `unarchive 1`
+
+Expected:
+- Command succeeds with `Unarchived: ...` message.
+
+!!**Negative Test Case 1: Invalid index format**!!
+
+Steps:
+1. Run `unarchive abc`
+
+Expected:
+- Command fails with message: `Invalid command format! unarchive: Unarchives the contact...`
+
+!!**Negative Test Case 2: Out-of-range index**!!
+
+Steps:
+1. Run `unarchive 999`
+
+Expected:
+- Command fails with message: `The contact index provided is invalid`
+
+### Clearing all entries : `clear`
+
+*Prerequisites:*
+- At least one contact exists.
+- Refer to [User Guide: Clearing all entries](UserGuide.md#clearing-all-entries--clear) for command usage
+
+!!**Positive Test Case 1: Clear all contacts**!!
+
+Steps:
+1. Run `clear`
+
+Expected:
+- Command succeeds with message: `Address book has been cleared!`
+- Contact list becomes empty.
+
+!!**Positive Test Case 2: Clear with extra text**!!
+
+Steps:
+1. Run `clear now`
+
+Expected:
+- Command still clears all entries (extra text is ignored).
+
+### Exiting the program : `exit`
+
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Exiting the program](UserGuide.md#exiting-the-program--exit) for command usage
+
+!!**Positive Test Case 1: Exit command**!!
+
+Steps:
+1. Run `exit`
+
+Expected:
+- CareSync closes.
+
+!!**Positive Test Case 2: Exit with extra text**!!
+
+Steps:
+1. Run `exit please`
+
+Expected:
+- CareSync closes (extra text is ignored).
+
+### Autocompleting a command
+
+*Prerequisites:*
+- CareSync command box is focused.
+- Refer to [User Guide: Autocompleting a command](UserGuide.md#autocompleting-a-command) for autocomplete rules
+
+!!**Positive Test Case 1: Autocomplete command word**!!
+
+Steps:
+1. Type `d`
+2. Press `TAB`
+
+Expected:
+- Input autocompletes to `delete`
+
+!!**Positive Test Case 2: Autocomplete prefixes**!!
+
+Steps:
+1. Type `add `
+2. Press `TAB` to insert the first prefix.
+3. Type a value for that parameter and add a trailing space.
+4. Press `TAB` again to get the next prefix.
+
+Expected:
+- Prefix suggestions are inserted in order, starting with `n/`
+
+!!**Positive Test Case 3: Autocomplete with index-required command**!!
+
+Steps:
+1. Type `edit ` and press `TAB`
+2. Type `edit 1 ` and press `TAB`
+
+Expected:
+- Step 1: no prefix suggestion is accepted.
+- Step 2: prefix suggestion is accepted (starts with `n/`).
+
+!!**Positive Test Case 4: Autocomplete stops when command becomes invalid**!!
+
+Steps:
+1. Type `find n/Alex ` and press `TAB`
+2. Type `edit 1 n/Joe x/a ` and press `TAB`
+
+Expected:
+- Step 1: no additional prefix suggestion is accepted for `find`
+- Step 2: no additional prefix suggestion is accepted because the command input is invalid.
+
+### Remembering a command
+
+*Prerequisites:*
+- CareSync command box is focused.
+- Refer to [User Guide: Remembering a command](UserGuide.md#remembering-a-command) for history behavior
+
+!!**Positive Test Case 1: Recall older commands**!!
+
+Steps:
+1. Run `list`
+2. Run `find n/Alex`
+3. Press `ARROW_UP` twice.
+
+Expected:
+- First `ARROW_UP`: command box shows `find n/Alex`
+- Second `ARROW_UP`: command box shows `list`
+
+!!**Positive Test Case 2: Navigate back down**!!
+
+Steps:
+1. After recalling older commands, press `ARROW_DOWN` until newest.
+
+Expected:
+- Command box cycles toward newer commands and finally becomes empty.
+
+!!**Positive Test Case 3: Consecutive duplicates are not duplicated in history**!!
+
+Steps:
+1. Run `list`
+2. Run `list` again.
+3. Press `ARROW_UP` once.
+
+Expected:
+- Only one `list` entry is recalled for consecutive duplicate submissions.
 
 ### Saving data
+
+Refer to [User Guide: Saving the data](UserGuide.md#saving-the-data) and [User Guide: Editing the data file](UserGuide.md#editing-the-data-file) for storage behavior details.
 
 !!**Positive Test Case 1: Missing data file**!!
 
