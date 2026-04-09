@@ -1527,6 +1527,7 @@ CareSync builds upon these existing features and introduces even more complex fe
 - Adding notes to contacts
 - Storing clients' visit date and time
 - Finding contacts by tag or visit date
+- Sorting the contact list by name or visit date-time
 - Bulk delete operation
 - Archiving contacts
 - Autocomplete commands
