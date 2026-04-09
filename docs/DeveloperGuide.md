@@ -464,7 +464,7 @@ If successful, the specified contact(s) will be permanently removed from CareSyn
 
 * 2a. User provides multiple search modes or text before the prefix.
   
-    * 2a1. CareSync displays an relevant error message.
+    * 2a1. CareSync displays the appropriate error message.
 
       Use case ends.
   
@@ -489,7 +489,7 @@ If successful, the specified contact(s) will be permanently removed from CareSyn
 **MSS**
 
 1.  User specifies the ID of the contact and tags to add or delete.
-2.  CareSync validates the tags to add not exist and tags to delete exist.
+2.  CareSync verifies that the tags to be added do not exist and tags to be deleted exist.
 3.  CareSync updates the contact's tag set.
 
     Use case ends.
@@ -511,22 +511,46 @@ If successful, the specified contact(s) will be permanently removed from CareSyn
 **MSS**
 
 1.  User specifies the ID of the contact to `archive` (or `unarchive`).
-2.  CareSync validates if the contact exist (e.g., cannot archive a contact that index out of bound).
-3.  CareSync toggles the archive status.
-4.  CareSync refreshes the displayed list.
+2.  CareSync validates if the contact exists.
+3.  CareSync checks the current status of the contact (e.g., if the contact is already archived).
+4.  CareSync updates the contact's status.
+5.  CareSync refreshes the displayed list.
 
     Use case ends.
+
+**Extensions**
+
+* 2a. The contact does not exist.
+
+    * 2a1. CareSync displays an error message.
+
+      Use case ends.
+
+* 3a. The contact is already in the target state.
+
+    * 3a1. CareSync displays a message indicating the contact is already archived (or unarchived).
+
+      Use case ends.
 
 **Use case: UC8 - Sort Contact List**
 
 **MSS**
 
 1.  User requests to list contacts with a sort field (e.g., name).
-2.  CareSync validates the field and reorders the list.
-3.  CareSync displays the sorted list. (Sorting will remain persistent until cleared).
+2.  CareSync validates the specified field.
+3.  CareSync sorts the contact list according to the field.
+4.  CareSync displays the sorted list. (Sorting will remain persistent until cleared).
 
     Use case ends.
 
+**Extensions**
+
+* 2a. The specified field is invalid.
+
+    * 2a1. CareSync displays an error message.
+
+      Use case ends.
+  
 **Use case: UC9 - View Archived Contacts**
 
 **MSS**
@@ -552,11 +576,20 @@ If successful, the specified contact(s) will be permanently removed from CareSyn
 **MSS**
 
 1.  User types the beginning of a command or prefix.
-2.  User presses `RETURN` on keyboard.
-3.  CareSync suggests or completes the command/prefix in the command box.
+2.  CareSync suggests a completion for the command or prefix.
+3.  User accepts the suggestion.
+4.  CareSync completes the command or prefix in the command box.
 
     Use case ends.
 
+**Extensions**
+
+* 2a. There is no valid completion for the current input.
+
+    * 2a1. CareSync provides no suggestion.
+
+      Use case ends.
+  
 **Use case: UC12 - View Help Information**
 
 **MSS**
@@ -580,7 +613,7 @@ If successful, the specified contact(s) will be permanently removed from CareSyn
 **MSS**
 
 1.  User is in the command input box.
-2.  User presses the `UP` or `DOWN` arrow key.
+2.  User navigates to view past commands.
 3.  CareSync retrieves and displays the previous or next command from the session history.
 
     Use case ends.
