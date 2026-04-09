@@ -598,7 +598,7 @@ Expected:
 
 *Prerequisites:*
 - CareSync is running.
-- Refer to [User Guide: Viewing help](UserGuide.md#viewing-help--help) for command usage
+- Refer to [User Guide: Viewing help](UserGuide.md#viewing-help-help) for command usage
 
 !!**Positive Test Case 1: Run the help command**!!
 
@@ -749,7 +749,7 @@ Expected:
 - At least one visible contact exists in the current list.
 - Run `list` before each INDEX-based test unless the test case intentionally uses a filtered list.
 - There are fewer than 999 contacts.
-- Refer to [User Guide: Archiving a contact](UserGuide.md#archiving-a-contact--archive) for command usage
+- Refer to [User Guide: Archiving a contact](UserGuide.md#archiving-a-contact-archive) for command usage
 
 !!**Positive Test Case 1: Archive by valid index**!!
 
@@ -788,7 +788,7 @@ Expected:
 
 *Prerequisites:*
 - CareSync is running.
-- Refer to [User Guide: Listing all unarchived contacts](UserGuide.md#listing-all-unarchived-contacts--list) for sorting behavior details
+- Refer to [User Guide: Listing all unarchived contacts](UserGuide.md#listing-all-unarchived-contacts-list) for sorting behavior details
 
 !!**Positive Test Case 1: List without sorting**!!
 
@@ -834,7 +834,7 @@ Expected:
 
 *Prerequisites:*
 - At least one archived contact exists (optional, for non-empty results).
-- Refer to [User Guide: Listing all archived contacts](UserGuide.md#listing-all-archived-contacts--list-archive) for command usage
+- Refer to [User Guide: Listing all archived contacts](UserGuide.md#listing-all-archived-contacts-list-archive) for command usage
 
 !!**Positive Test Case 1: List archived contacts**!!
 
@@ -858,7 +858,7 @@ Expected:
 - At least one contact exists in current displayed list.
 - Run `list` before each INDEX-based test case.
 - There are fewer than 999 contacts.
-- Refer to [User Guide: Editing a contact](UserGuide.md#editing-a-contact--edit) for field behavior (including tag replacement via `t/`)
+- Refer to [User Guide: Editing a contact](UserGuide.md#editing-a-contact-edit) for field behavior (including tag replacement via `t/`)
 
 !!**Positive Test Case 1: Edit one field**!!
 
@@ -1015,7 +1015,7 @@ Expected:
 *Prerequisites:*
 - At least one contact exists in current displayed list.
 - Run `list` before each INDEX-based test case.
-- Refer to [User Guide: Adding note to a contact](UserGuide.md#adding-note-to-a-contact--note) for note semantics
+- Refer to [User Guide: Adding note to a contact](UserGuide.md#adding-note-to-a-contact-note) for note semantics
 
 !!**Positive Test Case 1: Add/replace note**!!
 
@@ -1054,7 +1054,7 @@ Expected:
 *Prerequisites:*
 - At least one contact exists.
 - Run `list` before each INDEX-based test case.
-- Refer to [User Guide: Managing tags for a contact](UserGuide.md#managing-tags-for-a-contact--tag) for `at/` and `dt/` behavior
+- Refer to [User Guide: Managing tags for a contact](UserGuide.md#managing-tags-for-a-contact-tag) for `at/` and `dt/` behavior
 
 !!**Positive Test Case 1: Add one tag**!!
 
@@ -1121,7 +1121,7 @@ Expected:
 - At least 5 contacts exist.
 - Run `list` before each INDEX-based test case.
 - There are fewer than 999 contacts.
-- Refer to [User Guide: Deleting contacts](UserGuide.md#deleting-contacts--delete) for index/range syntax rules
+- Refer to [User Guide: Deleting contacts](UserGuide.md#deleting-contacts-delete) for index/range syntax rules
 
 !!**Positive Test Case 1: Delete single index**!!
 
@@ -1209,7 +1209,7 @@ Expected:
 - At least one archived contact exists for positive flow.
 - Run `list-archive` before each INDEX-based test case.
 - There are fewer than 999 archived contacts.
-- Refer to [User Guide: Unarchiving a contact](UserGuide.md#unarchiving-a-contact--unarchive) for command usage
+- Refer to [User Guide: Unarchiving a contact](UserGuide.md#unarchiving-a-contact-unarchive) for command usage
 
 !!**Positive Test Case 1: Unarchive from archived list**!!
 
@@ -1239,7 +1239,7 @@ Expected:
 
 *Prerequisites:*
 - At least one contact exists.
-- Refer to [User Guide: Clearing all entries](UserGuide.md#clearing-all-entries--clear) for command usage
+- Refer to [User Guide: Clearing all entries](UserGuide.md#clearing-all-entries-clear) for command usage
 
 !!**Positive Test Case 1: Clear all contacts**!!
 
@@ -1262,7 +1262,7 @@ Expected:
 
 *Prerequisites:*
 - CareSync is running.
-- Refer to [User Guide: Exiting the program](UserGuide.md#exiting-the-program--exit) for command usage
+- Refer to [User Guide: Exiting the program](UserGuide.md#exiting-the-program-exit) for command usage
 
 !!**Positive Test Case 1: Exit command**!!
 
