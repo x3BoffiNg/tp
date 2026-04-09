@@ -81,6 +81,8 @@ public class EditCommandParser implements Parser<EditCommand> {
      * If {@code tags} contain only one element which is an empty string, it will be parsed into a
      * {@code Set<Tag>} containing zero tags.
      * Normalizes tag names to lowercase to auto merge duplicate tags.
+     *
+     * @throws ParseException if any of the tag name is invalid.
      */
     private Optional<Set<Tag>> parseTagsForEdit(Collection<String> tags) throws ParseException {
         assert tags != null;
