@@ -210,7 +210,7 @@ The unarchive command marks the selected person as active again and refreshes th
 
 Step 5. The command result is returned to `Logic`, and `Logic` persists the updated address book through Storage.
 
-The following sequence diagram shows how an archive operation goes through the `Logic` component:
+The following sequence diagram shows how an `archive` operation goes through the `Logic` component:
 
 <puml src="diagrams/ArchiveSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the archive command" />
 
