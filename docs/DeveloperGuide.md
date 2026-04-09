@@ -661,6 +661,14 @@ Expected:
 - Both commands succeed.
 - Both contacts are present in the list.
 
+!!**Positive Test Case 4: Duplicate tag values**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/friend t/Friend`
+
+Expected:
+- Command succeeds but only one `friend` tag is added.
+
 !!**Negative Test Case 1: Add duplicate contact**!!
 
 Steps:
@@ -734,14 +742,6 @@ Steps:
 
 Expected:
 - Command fails with message: `Tag names should be alphanumeric and at most 15 characters long`
-
-!!**Negative Test Case 10: Duplicate tag values**!!
-
-Steps:
-1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/friend t/Friend`
-
-Expected:
-- Command fails with message: `Duplicate tags detected! Tag names are case-insensitive`
 
 ### Archiving a contact : `archive`
 
@@ -884,6 +884,14 @@ Steps:
 Expected:
 - Command succeeds and tags for contact 1 are cleared.
 
+!!**Positive Test Case 4: Duplicate tag values**!!
+
+Steps:
+1. Run `edit 1 t/friend t/Friend`
+
+Expected:
+- Command succeeds but only one `friend` tag is added.
+
 !!**Negative Test Case 1: No fields supplied**!!
 
 Steps:
@@ -915,14 +923,6 @@ Steps:
 
 Expected:
 - Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
-
-!!**Negative Test Case 5: Duplicate tag values**!!
-
-Steps:
-1. Run `edit 1 t/friend t/Friend`
-
-Expected:
-- Command fails with message: `Duplicate tags detected! Tag names are case-insensitive`
 
 ### Locating contacts by specified field: `find`
 
@@ -1065,6 +1065,14 @@ Steps:
 
 Expected:
 - Command succeeds and both tag updates are applied.
+
+!!**Positive Test Case 4: Adding duplicate tag values**!!
+
+Steps:
+1. Run `tag 1 at/friend at/Friend`
+
+Expected:
+- Command succeeds but only one `friend` tag is added.
 
 !!**Negative Test Case 1: No `at/` and `dt/` provided**!!
 
