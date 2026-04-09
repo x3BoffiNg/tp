@@ -12,24 +12,29 @@ public class VisitDateTimeTest {
 
     @Test
     public void constructor_null_throwsNullPointerException() {
+        // EP (invalid): null input should be rejected.
         assertThrows(NullPointerException.class, () -> new VisitDateTime(null));
     }
 
     @Test
     public void constructor_invalidVisitDateTime_throwsIllegalArgumentException() {
+        // EP (invalid): blank string is not a valid visit date-time.
         String invalidVisitDateTime = "";
         assertThrows(IllegalArgumentException.class, () -> new VisitDateTime(invalidVisitDateTime));
     }
 
     @Test
     public void isValidVisitDateTime() {
+        // EP (invalid): null input.
         // null visit date time
         assertFalse(VisitDateTime.isValidVisitDateTime(null));
 
+        // EP (invalid): blank/whitespace input.
         // blank visit date time
         assertFalse(VisitDateTime.isValidVisitDateTime(""));
         assertFalse(VisitDateTime.isValidVisitDateTime(" "));
 
+        // EP (invalid): out-of-range fields or wrong format.
         // invalid visit date times
         assertFalse(VisitDateTime.isValidVisitDateTime("2026-13-01 14:30")); // invalid month
         assertFalse(VisitDateTime.isValidVisitDateTime("2026-12-32 14:30")); // invalid day
@@ -38,10 +43,21 @@ public class VisitDateTimeTest {
         assertFalse(VisitDateTime.isValidVisitDateTime("01-12-2026 14:30")); // wrong format
         assertFalse(VisitDateTime.isValidVisitDateTime("2026/12/01 14:30")); // wrong separator
 
+        // EP (valid): canonical valid values and permissive-coercion values.
         // valid visit date times
         assertTrue(VisitDateTime.isValidVisitDateTime("2026-03-15 14:30"));
         assertTrue(VisitDateTime.isValidVisitDateTime("2026-12-01 00:00"));
         assertTrue(VisitDateTime.isValidVisitDateTime("2026-06-20 23:59"));
+        assertTrue(VisitDateTime.isValidVisitDateTime("2026-04-31 14:30")); // rounds to month end
+        assertTrue(VisitDateTime.isValidVisitDateTime("2026-12-01 24:00")); // rolls to next day midnight
+    }
+
+    @Test
+    public void constructor_permissiveInput_normalizesValue() {
+        // BVA: end-of-month overflow should coerce to month end.
+        assertEquals("2026-04-30 14:30", new VisitDateTime("2026-04-31 14:30").toString());
+        // BVA: 24:00 should roll over to next-day 00:00.
+        assertEquals("2026-12-02 00:00", new VisitDateTime("2026-12-01 24:00").toString());
     }
 
     @Test
@@ -66,6 +82,7 @@ public class VisitDateTimeTest {
 
     @Test
     public void testEmptyVisitDateTime() {
+        // EP (valid optional): empty object represents absence of value.
         VisitDateTime emptyVisit = new VisitDateTime();
         assertFalse(emptyVisit.isPresent());
         assertEquals("", emptyVisit.toString());
@@ -74,6 +91,7 @@ public class VisitDateTimeTest {
 
     @Test
     public void testGetDisplayValue() {
+        // EP (valid): present value should render in display format.
         VisitDateTime visitDateTime = new VisitDateTime("2026-03-15 14:30");
         assertEquals("15 Mar 2026, 02:30 PM", visitDateTime.getDisplayValue());
     }

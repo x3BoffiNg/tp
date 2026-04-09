@@ -5,8 +5,10 @@ import static seedu.address.logic.Messages.MESSAGE_NONEXISTENCE_INDEX;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -22,12 +24,16 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes one or more persons by index.\n"
-            + "Parameters: INDEX [MORE INDEXES or RANGES]\n"
-            + "Example: delete 1 3 6-9";
+            + ": Deletes one or more contacts by index.\n"
+            + "Parameters: INDEX or RANGE (must be a positive integer)\n"
+            + "Example: delete 1\n"
+            + "Example: delete 3-7\n"
+            + "Example: delete 1 3-7 10";
 
-    public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted persons:\n%1$s";
 
+    public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted contact(s):\n%1$s";
+
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
     private final List<Index> targetIndexes;
 
     /**
@@ -51,6 +57,8 @@ public class DeleteCommand extends Command {
      */
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        logger.info("Executing delete command for indexes: " + targetIndexes);
+
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
@@ -63,7 +71,11 @@ public class DeleteCommand extends Command {
 
         List<Index> sortedIndexes = toDescendingIndexes(targetIndexes);
 
+        logger.info("Deleting persons at sorted indexes: " + sortedIndexes);
+
         String messageBody = deletePersonsAndFormat(model, lastShownList, sortedIndexes);
+
+        logger.info("Successfully deleted " + sortedIndexes.size() + " persons");
 
         return new CommandResult(
                 String.format(MESSAGE_DELETE_PERSONS_SUCCESS, messageBody)
@@ -90,6 +102,7 @@ public class DeleteCommand extends Command {
                     .map(String::valueOf)
                     .collect(Collectors.joining(", "));
 
+            logger.warning("Invalid indexes provided: " + invalidIndexes);
             throw new CommandException(
                     String.format(MESSAGE_NONEXISTENCE_INDEX, joined)
             );
@@ -130,6 +143,8 @@ public class DeleteCommand extends Command {
                     : "Index should be within bounds";
 
             Person personToDelete = lastShownList.get(index.getZeroBased());
+            logger.fine("Deleting person: " + personToDelete);
+
             model.deletePerson(personToDelete);
             deletedPersonsMessage.append(Messages.format(personToDelete));
         }

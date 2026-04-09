@@ -113,6 +113,11 @@ public class HelpWindow extends UiPart<Stage> {
      * Focuses on the help window.
      */
     public void focus() {
+        // Restore the window first so minimised help dialogs are visible again.
+        if (getRoot().isIconified()) {
+            getRoot().setIconified(false);
+        }
+        getRoot().toFront();
         getRoot().requestFocus();
     }
 
@@ -174,7 +179,10 @@ public class HelpWindow extends UiPart<Stage> {
     }
 
     private Label createUsageBlockLabel(String text) {
-        return createCodeBlockLabel(text, CSS_CLASS_CODE_BLOCK_USAGE);
+        String usageStyleClass = text.trim().startsWith("Usage:")
+                ? CSS_CLASS_CODE_BLOCK_EXAMPLE
+                : CSS_CLASS_CODE_BLOCK_USAGE;
+        return createCodeBlockLabel(text, usageStyleClass);
     }
 
     private Label createExampleBlockLabel(String text) {

@@ -20,7 +20,7 @@ public class UnarchiveCommand extends Command {
 
     public static final String COMMAND_WORD = "unarchive";
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Unarchives the person identified by the index number.\n"
+            + ": Unarchives the contact identified by the index number.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
     public static final String MESSAGE_UNARCHIVE_PERSON_SUCCESS = "Unarchived: %1$s";
@@ -59,8 +59,8 @@ public class UnarchiveCommand extends Command {
 
         logger.info("Successfully unarchived person: " + personToUnarchive);
 
-        // Refresh view to show only active persons again
-        model.updateFilteredPersonList(p -> !p.isArchived());
+        // Refresh on current active list
+        model.updateFilteredPersonList(model.getCurrentPredicate());
 
         return new CommandResult(
                 String.format(MESSAGE_UNARCHIVE_PERSON_SUCCESS,

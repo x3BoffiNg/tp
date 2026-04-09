@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -116,19 +117,13 @@ public class CommandBox extends UiPart<Region> {
     }
 
     private void updateAutocompleteHint() {
-        if (!commandTextField.isFocused()) {
+        if (!shouldComputeAutocompleteHint()) {
             clearAutocompleteHint();
             return;
         }
 
         String userInput = commandTextField.getText();
-        if (commandTextField.getCaretPosition() != userInput.length()) {
-            clearAutocompleteHint();
-            return;
-        }
-
-        AutocompleteProvider.suggestCompletion(userInput)
-                .filter(suggestion -> suggestion.length() > userInput.length())
+        getAutocompleteSuggestionIfExtends(userInput)
                 .ifPresentOrElse(
                         suggestion -> showAutocompleteHint(userInput, suggestion),
                         this::clearAutocompleteHint);
@@ -136,14 +131,10 @@ public class CommandBox extends UiPart<Region> {
 
     private boolean acceptAutocompleteSuggestion() {
         String currentInput = commandTextField.getText();
-        return AutocompleteProvider.suggestCompletion(currentInput)
-                .filter(suggestion -> suggestion.length() > currentInput.length())
+        return getAutocompleteSuggestionIfExtends(currentInput)
                 .map(suggestion -> {
-                    logger.fine("Accepted autocomplete suggestion. inputLength="
-                            + currentInput.length() + ", suggestionLength=" + suggestion.length());
-                    setCommandText(suggestion);
-                    commandTextField.positionCaret(suggestion.length());
-                    clearAutocompleteHint();
+                    logAutocompletionAccepted(currentInput, suggestion);
+                    applyAutocompleteSuggestion(suggestion);
                     return true;
                 })
                 .orElse(false);
@@ -178,6 +169,37 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
+     * Determines if autocomplete hint computation is appropriate based on
+     * current text field state (focus and caret position).
+     */
+    private boolean shouldComputeAutocompleteHint() {
+        if (!commandTextField.isFocused()) {
+            return false;
+        }
+        String userInput = commandTextField.getText();
+        return commandTextField.getCaretPosition() == userInput.length();
+    }
+
+    /**
+     * Retrieves an autocomplete suggestion that extends the given input.
+     * Returns an empty Optional if no suggestion extends the input.
+     */
+    private Optional<String> getAutocompleteSuggestionIfExtends(String input) {
+        return AutocompleteProvider.suggestCompletion(input)
+                .filter(suggestion -> suggestion.length() > input.length());
+    }
+
+    /**
+     * Applies the accepted autocomplete suggestion to the command text field,
+     * setting text, positioning caret, and clearing the hint.
+     */
+    private void applyAutocompleteSuggestion(String suggestion) {
+        setCommandText(suggestion);
+        commandTextField.positionCaret(suggestion.length());
+        clearAutocompleteHint();
+    }
+
+    /**
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {
@@ -195,6 +217,11 @@ public class CommandBox extends UiPart<Region> {
         }
 
         styleClass.add(ERROR_STYLE_CLASS);
+    }
+
+    private void logAutocompletionAccepted(String input, String suggestion) {
+        logger.fine("Accepted autocomplete suggestion. inputLength="
+                + input.length() + ", suggestionLength=" + suggestion.length());
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.SortField;
 import seedu.address.model.person.Person;
 
 /**
@@ -98,10 +99,16 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
+     * Returns the predicate currently applied to the filtered person list.
+     * This can be reused to reapply the existing filter without modifying it.
+     */
+    Predicate<Person> getCurrentPredicate();
+
+    /**
      * Sorts the filtered person list by the specified {@code field}.
      * The ordering of the current filtered view will be updated accordingly.
      */
-    default void sortFilteredPersonList(String field){}
+    default void sortFilteredPersonList(SortField field){}
 
     /**
      * Resets the sorting of the filtered person list.

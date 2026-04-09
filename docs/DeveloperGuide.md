@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# CareSync Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -13,7 +13,13 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
+- This project is built upon [AddressBook Level-3 project by the SE-EDU initiative](https://github.com/se-edu/addressbook-level3).
+- Gradle - for build automation and dependency management: https://gradle.org
+- Jackson - JSON parser: https://github.com/FasterXML/jackson
+- JavaFX - for UI development: https://openjfx.io
+- JUnit5 - testing framework: https://github.com/junit-team/junit5
+- Markbind - for website generation: https://markbind.org
+- PlantUML - for diagram creation: https://plantuml.com
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -35,7 +41,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -67,13 +73,17 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+Additionally, there are two helper classes (i.e.`CommandHistory` and `HelpContentProvider`) that do not inherit from the abstract `UiPart` class. They exist to provide their corresponding UI elements with the necessary information to perform their function.
+* `CommandHistory` stores past commands that the user has entered, regardless if it was a valid command or not, to be used to fill `CommandBox`
+* `HelpContentProvider` gets the information needed to populate `HelpWindow`
+
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -84,13 +94,13 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1 3 6-9")` API call as an example.
 
 <puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
 
@@ -140,7 +150,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -151,7 +161,21 @@ The `Storage` component,
 
 ### Common classes
 
-Classes used by multiple components are in the `seedu.address.commons` package.
+The following is a non-exhaustive list of common classes that live in `seedu.address.commons` and are reused across multiple components:
+* Config — stores application configuration such as logging level and file paths.
+* GuiSettings — stores UI-related preferences such as window size and position.
+* LogsCenter — configures and manages application-wide logging, providing logger instances used across the system.
+* JsonUtil and FileUtil — handle data persistence by providing utilities for reading, writing, and serializing data to and from JSON files.
+* DataLoadingException and IllegalValueException — represent exceptions related to data loading and validation errors.
+* Utility classes such as `AppUtil`, `CollectionUtil`, and `StringUtil` provide helper methods for common operations like argument validation, collection handling, and string processing.
+
+<box type="info" seamless>
+
+**Guideline:** Components should interact with these classes through their public APIs (interfaces or utility methods) rather than their internal implementation details to maintain loose coupling and improve testability.
+
+**Disclaimer:** This is a non-exhaustive list of common classes intended to give developers an overview of shared utilities in the application. Refer to the `commons` package for the complete list of classes.
+
+</box>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -159,103 +183,81 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Archive Feature
 
 #### Proposed Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The archive mechanism is facilitated by an archive flag stored in each Person.
+A person is considered archived when this flag is true, and active otherwise.
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+The mechanism uses the following Model operations:
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+- archivePerson(person): marks a person as archived.
+- unarchivePerson(person): marks a person as active again.
+- updateFilteredPersonList(predicate): refreshes the displayed list for the current command context.
 
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+Given below is an example usage scenario and how the archive mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user executes archive 1.
+The archive command validates the index against the current filtered list and archives the selected person.
 
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+Step 2. The command refreshes the filtered list using the current predicate so the UI reflects the updated state.
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 3. The user executes list-archive.
+The displayed list is filtered to show only archived persons.
 
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
+Step 4. The user executes unarchive 1 from the archived list.
+The unarchive command marks the selected person as active again and refreshes the list.
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 5. The command result is returned to Logic, and Logic persists the updated address book through Storage.
 
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+The following sequence diagram shows how an archive operation goes through the Logic component:
 
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</box>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
+<puml src="diagrams/ArchiveSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the archive command" />
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+**Note:** The lifeline for ArchiveCommandParser should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
 </box>
 
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
+Similarly, how an archive operation goes through the Model component is shown below:
 
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+<puml src="diagrams/ArchiveSequenceDiagram-Model.puml" width="420" />
+
+The unarchive command does the opposite. It calls unarchivePerson(person), which restores the selected person to active state.
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+**Note:** If the selected index is invalid, the command returns an error instead of modifying data.
+**Note:** list-archive filtering is applied through updateFilteredPersonList(predicate), not inside archivePerson(...).
 
 </box>
 
-Similarly, how an undo operation goes through the `Model` component is shown below:
+The following activity diagram summarizes what happens when a user executes the archive command:
 
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+<puml src="diagrams/ArchiveActivityDiagram.puml" width="420" />
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+**Note:** If the command returns an error (for example invalid index), no data is modified.
+**Note:** After successful command execution, Logic persists the current address book through Storage.
 
 </box>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+#### Design considerations
 
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+Aspect: How archived data is represented
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+1. Alternative 1 (current choice): Keep an archive flag in each Person.
+   - Pros: Minimal structural changes, straightforward persistence, low implementation overhead.
+   - Cons: Filtering predicates must be applied consistently across commands.
 
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
+2. Alternative 2: Move archived persons into a separate collection.
+   - Pros: Strong conceptual separation between active and archived contacts.
+   - Cons: Higher complexity for edit, find, delete, indexing, and synchronization logic.
 
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+{more aspects and alternatives to be added}
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -293,7 +295,6 @@ CareSync helps social service workers keep track of their clients and service co
 details as well as allow them to easily track upcoming visits with the various families.
 
 
-
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
@@ -314,10 +315,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *` | user | sort contacts by name or ID | find contacts easily |
 | `* *` | user | mark a contact’s status (e.g. stable, urgent) | prioritise my work |
 | `* *` | user | add a visit note to a contact | remember the purpose of the visit |
+| `* *` | user | pin contacts | identify important contacts easily |
 | `* *` | user | reuse past commands | execute commands faster |
-| `* *` | user | undo commands | undo any wrong changes  |
+| `* *` | user | autocomplete commands | execute commands faster |
+| `* *` | user | undo commands | undo any wrong changes |
+| `* *` | user | archive contacts | hide irrelavant contacts without deleting them |
+| `* *` | user | list archived contacts | view hidden contacts |
+| `* *` | user | unarchive contacts | restore hidden contacts to the main contact list |
 | `* *` | expert user | add aliases to commands | execute commands faster |
 | `* *` | new user | see sample commands | know valid command formats |
+| `*` | expert user | combine commands | execute commands efficiently |
 | `*` | user | add a specific visit location | quickly reference where the visit takes place |
 | `*` | user | set visit type (e.g. consultation, remote) | understand the nature of the visit |
 | `*` | user | specify the visit duration | plan my time realistically |
@@ -328,7 +335,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*` | new user | transfer my contact details from my phone’s contact list to CareSync | transition to using CareSync easily |
 
 
-*{More to be added}*
+*{More may be added in the future}*
 
 ### Use cases
 
@@ -338,12 +345,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Guarantee:**
 - If successful, the contact will be stored and visible in the contact list.
-- A duplicate contact will never be added.
+- A duplicate contact (same name) will never be added.
 - Malformed contacts based on invalid command entry will never be added.
 
 **MSS**
 
-1.  User enters the required details to add a contact.
+1.  User enters the required details (`Name`, `Phone`, `Email`, `Address`) to add a contact. Optional fields like `Note` and `VisitDateTime` can also be included.
 2.  CareSync validates the entered data.
 3.  CareSync stores the new contact.
 4.  CareSync displays a success message.
@@ -352,17 +359,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. CareSync detects invalid input format.
+* 2a. CareSync detects invalid input format (e.g., invalid email or incorrectly formatted visit date).
 
    * 2a1. CareSync displays an error message.
    * 2a2. User re-enters data.
 
      Steps 2a1–2a2 are repeated until the data entered is valid.
- 
+
      Use case resumes from step 3.
 
 
-* 2b. CareSync detects existing contact.
+* 2b. CareSync detects existing contact with the same name.
 
     * 2b1. CareSync notifies the user that the contact already exists.
     * 2b2. User re-enters data.
@@ -382,7 +389,7 @@ If successful, the selected contact’s details will be updated and saved.
 **MSS**
 
 1.  CareSync displays contact(s).
-2.  User specifies the ID of the contact and fields to be updated (e.g., phone number or address).
+2.  User specifies the ID of the contact and fields to be updated (e.g., note, phone number, email).
 3.  CareSync validates the new data.
 4.  CareSync updates the contact information.
 5.  CareSync displays a success message.
@@ -407,105 +414,218 @@ If successful, the selected contact’s details will be updated and saved.
 
       Use case resumes from step 4.
 
-**Use case: UC3 - Delete Contact**
+**Use case: UC3 - Delete Contact(s)**
 
 **Precondition:**
-A contact exists in CareSync.
+One or more contacts exist in CareSync.
 
 **Guarantee:**
-If successful, the contact will be permanently removed from CareSync.
+If successful, the specified contact(s) will be permanently removed from CareSync. if any index is invalid, ***no contacts are deleted***.
 
 **MSS**
 
 1.  CareSync displays contact(s).
-2.  User specifies the ID of the contact to be deleted.
-3.  CareSync validates the contact’s existence.
-4.  CareSync removes the contact from storage.
+2.  User specifies the ***ID(s) or Range of ID(s)*** of the contacts to be deleted (e.g., `1 3-5`).
+3.  CareSync validates all specified contacts indexes.
+4.  CareSync removes the contact(s) from storage.
 5.  CareSync displays a success message and an updated list.
 
     Use case ends.
 
 **Extensions**
 
-* 3a. User entered an invalid ID.
+* 3a. User entered an invalid ID or an invalid range (e.g., `3-1`).
 
    * 3a1. CareSync displays an error message.
-   * 3a2. User re-enters data.
+   * 3a2. No contacts are deleted.
+   * 3a3. User re-enters data.
 
-     Steps 3a1–3a2 are repeated until the data entered is valid.
+     Steps 3a1–3a3 are repeated until the data entered is valid.
 
      Use case resumes from step 4.
 
-**Use case: UC4 - Search Contact via Name**
+**Use case: UC4 - Search Contact**
 
-**Guarantee:** Matching contact(s), if any, are displayed to the user.
+**Guarantee:** Matching contact(s) are displayed to the user, if any. CareSync enforces a strict ***Single-Mode*** policy.
 
 **MSS**
 
-1.  User specifies the name to be searched.
-2.  CareSync validates the contact's existence.
-3.  CareSync retrieves the matching contact(s).
-4.  CareSync displays the search results.
+1.  User specifies exactly one search criterion (by name, tag, or visit date).
+2.  CareSync validates that no preamble exists and only one input search mode.
+3.  CareSync retrieves and displays matching contact(s).
 
     Use case ends.
 
 **Extensions**
 
-* 2a. No matching contact is found.
+* 2a. User provides multiple search modes or text before the prefix.
+  
+    * 2a1. CareSync displays the appropriate error message.
 
-    * 2a1. CareSync displays a message indicating no results.
+      Use case ends.
+  
+* 3a. No matching contact is found.
+
+    * 3a1. CareSync displays a message indicating no results.
 
       Use case ends.
 
-**Use case: UC5 - Search Contact via Tag**
-
-**Guarantee:** Matching contact(s), if any, are displayed to the user.
+**Use case: UC5 - Manage Notes**
 
 **MSS**
 
-1.  User specifies the tag to be searched.
-2.  CareSync validates the contact's existence.
-3.  CareSync retrieves the matching contact(s).
-4.  CareSync displays the search results.
+1.  User specifies the ID of the contact and provides a note.
+2.  CareSync updates (change or delete) the contact's note.
+3.  CareSync displays a success message.
+
+    Use case ends.
+
+**Use case: UC6 - Manage Tags**
+
+**MSS**
+
+1.  User specifies the ID of the contact and tags to add or delete.
+2.  CareSync verifies that the tags to be added do not exist and tags to be deleted exist.
+3.  CareSync updates the contact's tag set.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. No matching contact is found.
+* 2a. No matching contact is found (e.g., invalid ID specified by the user).
 
-    * 2a1. CareSync displays a message indicating no results.
+    * 2a1. CareSync displays a message indicating no result.
+    * Use case ends.
+
+* 2b. Validation fails (e.g., deleting a tag the contact does not have).
+
+    * 2b1. CareSync displays an error message. ***No changes are applied***.
+    * Use case ends.
+  
+**Use case: UC7 - Archive / Unarchive Contact**
+
+**MSS**
+
+1.  User specifies the ID of the contact to `archive` (or `unarchive`).
+2.  CareSync validates if the contact exists.
+3.  CareSync checks the current status of the contact (e.g., if the contact is already archived).
+4.  CareSync updates the contact's status.
+5.  CareSync refreshes the displayed list.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The contact does not exist.
+
+    * 2a1. CareSync displays an error message.
 
       Use case ends.
 
-**Use case: UC6 - Set Visit Date and Time**
+* 3a. The contact is already in the target state.
 
-**Precondition:** Contact exists in CareSync.
+    * 3a1. CareSync displays a message indicating the contact is already archived (or unarchived).
 
-**Guarantee:** If successful, the next visit date and time for the contact is updated and saved.
+      Use case ends.
+
+**Use case: UC8 - Sort Contact List**
 
 **MSS**
 
-1.  CareSync displays contact(s).
-2.  User specifies the ID of the contact and the fields to be updated (e.g. visit date).
-3.  CareSync validates the date format.
-4.  CareSync updates the next visit date and time for the contact.
-5.  CareSync displays a success message.
+1.  User requests to list contacts with a sort field (e.g., name).
+2.  CareSync validates the specified field.
+3.  CareSync sorts the contact list according to the field.
+4.  CareSync displays the sorted list. (Sorting will remain persistent until cleared).
 
     Use case ends.
 
 **Extensions**
 
-* 3a. CareSync detects invalid input format.
+* 2a. The specified field is invalid.
 
-    * 3a1. CareSync displays an error message.
-    * 3a2. User re-enters correct data.
+    * 2a1. CareSync displays an error message.
 
-      Steps 3a1-3a2 are repeated until the data entered is valid.
+      Use case ends.
+  
+**Use case: UC9 - View Archived Contacts**
 
-      Use case resumes from step 4.
+**MSS**
 
-*{More to be added}*
+1.  User requests to see the archive list.
+2.  CareSync filters and displays only archived contacts.
+
+    Use case ends.
+
+
+**Use case: UC10 - Clear All Entries**
+
+**MSS**
+
+1.  User requests to clear all data.
+2.  CareSync removes all contacts from the address book.
+3.  CareSync displays an empty list.
+
+    Use case ends.
+
+**Use case: UC11 - Command Autocompletion**
+
+**MSS**
+
+1.  User types the beginning of a command or prefix.
+2.  CareSync suggests a completion for the command or prefix.
+3.  User accepts the suggestion.
+4.  CareSync completes the command or prefix in the command box.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. There is no valid completion for the current input.
+
+    * 2a1. CareSync provides no suggestion.
+
+      Use case ends.
+  
+**Use case: UC12 - View Help Information**
+
+**MSS**
+
+1.  User requests help (e.g., types help or clicks the help menu).
+2.  CareSync opens the help window containing the link to the User Guide.
+3.  CareSync focuses the help window.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The help window is already open but hidden behind the main window.
+
+    * 2a1. CareSync brings it to the front of the screen.
+
+    Use case resumes at step 3.
+
+**Use case: UC13 -Access Command History**
+
+**MSS**
+
+1.  User is in the command input box.
+2.  User navigates to view past commands.
+3.  CareSync retrieves and displays the previous or next command from the session history.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. There is no previous/next command in the history (e.g., user is at the start of the session).
+
+    * 2a1. CareSync maintains the current text in the input box.
+    * Use case ends.
+
+* 2b. The user has entered consecutive identical commands (e.g., `list`, then `list`).
+
+    * 2b1. CareSync collapses these into a single history entry.
+    * Use case resumes at step 3.
+
 
 ### Non-Functional Requirements
 
@@ -528,7 +648,7 @@ admin commands) should be able to accomplish most of the tasks faster using comm
 14. The system architecture should allow future expansion of features (e.g., additional
 commands or data fields) without requiring major restructuring of existing components.
 
-*{More to be added}*
+*{More may be added in the future}*
 
 ### Glossary
 
@@ -555,44 +675,834 @@ testers are expected to do more *exploratory* testing.
 
 </box>
 
+### Manual testing conventions
+
+- Detailed command syntax, parameter constraints, and usage examples are documented in the [User Guide](UserGuide.md) under each command section
+- DG manual tests focus on behavior verification (state change, list update, and error handling), not re-explaining command format
+- For commands using `INDEX`, run `list` first (or `list-archive` for `unarchive`) unless the test case explicitly requires a filtered list
+- Where a negative test lists a message, verify the exact message shown in the result box
+
 ### Launch and shutdown
 
-1. Initial launch
+!!**Initial launch**!!
 
-   1. Download the jar file and copy into an empty folder
+Steps:
+1. Download the latest [jar file](https://github.com/AY2526S2-CS2103-F11-1/tp/releases) and copy into an empty folder.
+2. Double-click the jar file.
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+Expected:
+- Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+!!**Saving window preferences**!!
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+Steps:
+1. Resize the window to an optimum size.
+2. Move the window to a different location.
+3. Close the window.
+4. Re-launch the app by double-clicking the jar file.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+Expected:
+- The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+### Viewing help : `help`
 
-### Deleting a person
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Viewing help](UserGuide.md#viewing-help-help) for command usage
 
-1. Deleting a person while all persons are being shown
+!!**Positive Test Case 1: Run the help command**!!
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+Steps:
+1. Run `help`
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+Expected:
+- Help window opens.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+!!**Positive Test Case 2: Run the help command with existing help window**!!
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+Steps:
+1. Run `help`
+2. Minimise the help window.
+3. Run `help` again.
 
-1. _{ more test cases …​ }_
+Expected:
+- Existing help window is focused.
+
+!!**Positive Test Case 3: Run help with extra parameters**!!
+
+Steps:
+1. Run `help 123`
+
+Expected:
+- Help window opens.
+
+### Adding a contact: `add`
+
+*Prerequisites:*
+- CareSync is running.
+- Run `list` to see the current contact list.
+- Refer to [User Guide: Adding a contact](UserGuide.md#adding-a-contact-add) for full field rules
+
+!!**Positive Test Case 1: Add with compulsory fields only**!!
+
+Steps:
+1. Run `add n/Hugo p/96543218 e/hugo@example.com a/Hugo street, block 123, #01-01`
+
+Expected:
+- Message: `New contact added: ...`
+- Contact is added to the list with the specified values.
+
+!!**Positive Test Case 2: Add with all fields**!!
+
+Steps:
+1. Run `add n/John Doe p/+65 9876-5432 e/johnd@example.com a/John street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00 t/caseid6`
+
+Expected:
+- Message: `New contact added: ...`
+- Contact is added with optional fields populated.
+
+!!**Positive Test Case 3: Add contacts with duplicate non-name fields**!!
+
+Steps:
+1. Run `add n/Alice One p/88883333 e/alice@example.com a/Alice street, block 123, #01-01`
+2. Run `add n/Alice Two p/88883333 e/alice@example.com a/Alice street, block 123, #01-01`
+
+Expected:
+- Both commands succeed.
+- Both contacts are present in the list.
+
+!!**Positive Test Case 4: Duplicate tag values**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/friend t/Friend`
+
+Expected:
+- Command succeeds but only one `friend` tag is added.
+
+!!**Negative Test Case 1: Add duplicate contact**!!
+
+Steps:
+1. Run `add n/Alicia p/80015678 e/alicia@example.com a/Alicia street, block 123, #01-01`
+2. Run the same command again.
+
+Expected:
+- Second command fails with message: `This contact already exists in the address book.`
+- No duplicate contact is added.
+
+!!**Negative Test Case 2: Invalid name**!!
+
+Steps:
+1. Run `add n/Bob- p/92225430 e/bob@example.com a/Bob street, block 123, #01-01`
+
+Expected:
+- Command fails with message: `Names should only contain alphanumeric characters...`
+
+!!**Negative Test Case 3: Invalid phone**!!
+
+Steps:
+1. Run `add n/Bob p/+-- e/bob@example.com a/Bob street, block 123, #01-01`
+
+Expected:
+- Command fails with message: `Phone numbers should be at most 15 characters...`
+
+!!**Negative Test Case 4: Invalid email**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bemail a/Bob street, block 123, #01-01`
+
+Expected:
+- Command fails with message: `Emails should be of the format local-part@domain...`
+
+!!**Negative Test Case 5: Invalid address**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street/block123`
+
+Expected:
+- Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
+
+!!**Negative Test Case 6: Invalid note**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 nt/notes+-`
+
+Expected:
+- Command fails with message: `Notes should be up to 150 characters and contain only alphanumeric...`
+
+!!**Negative Test Case 7: Invalid visit date**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-32 12:00`
+
+Expected:
+- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm...`
+
+!!**Negative Test Case 8: Invalid visit time**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 v/2026-12-01 25:00`
+
+Expected:
+- Command fails with message: `Visit date and time must be a valid date and time in the format: yyyy-MM-dd HH:mm...`
+
+!!**Negative Test Case 9: Invalid tag**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/fr!end`
+
+Expected:
+- Command fails with message: `Tag names should be alphanumeric and at most 15 characters long`
+
+### Archiving a contact : `archive`
+
+*Prerequisites:*
+- At least one visible contact exists in the current list.
+- Run `list` before each INDEX-based test unless the test case intentionally uses a filtered list.
+- There are fewer than 999 contacts.
+- Refer to [User Guide: Archiving a contact](UserGuide.md#archiving-a-contact-archive) for command usage
+
+!!**Positive Test Case 1: Archive by valid index**!!
+
+Steps:
+1. Run `archive 1`
+
+Expected:
+- Command succeeds with `Archived: ...` message.
+
+!!**Positive Test Case 2: Archive from filtered result**!!
+
+Steps:
+1. Run `find n/Alex`
+2. Run `archive 1`
+
+Expected:
+- The first displayed contact in filtered results is archived.
+
+!!**Negative Test Case 1: Invalid index format**!!
+
+Steps:
+1. Run `archive a`
+
+Expected:
+- Command fails with message: `Invalid command format! archive: Archives the contact...`
+
+!!**Negative Test Case 2: Out-of-range index**!!
+
+Steps:
+1. Run `archive 999`
+
+Expected:
+- Command fails with message: `The contact index provided is invalid`
+
+### Listing all unarchived contacts : `list`
+
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Listing all unarchived contacts](UserGuide.md#listing-all-unarchived-contacts-list) for sorting behavior details
+
+!!**Positive Test Case 1: List without sorting**!!
+
+Steps:
+1. Run `list`
+
+Expected:
+- All contacts are displayed.
+
+!!**Positive Test Case 2: List sorted by name**!!
+
+Steps:
+1. Run `list s/name`
+
+Expected:
+- All contacts are displayed sorted by name.
+
+!!**Positive Test Case 3: List sorted by visit**!!
+
+Steps:
+1. Run `list s/visit`
+
+Expected:
+- All contacts are displayed sorted by visit date/time.
+
+!!**Negative Test Case 1: Invalid sort field**!!
+
+Steps:
+1. Run `list s/phone`
+
+Expected:
+- Command fails with message: `Invalid sort field. Valid options are: name, visit`
+
+!!**Negative Test Case 2: Unexpected preamble token**!!
+
+Steps:
+1. Run `list abc`
+
+Expected:
+- Command fails with message: `Invalid command format! list: Lists all contacts...`
+
+### Listing all archived contacts : `list-archive`
+
+*Prerequisites:*
+- At least one archived contact exists (optional, for non-empty results).
+- Refer to [User Guide: Listing all archived contacts](UserGuide.md#listing-all-archived-contacts-list-archive) for command usage
+
+!!**Positive Test Case 1: List archived contacts**!!
+
+Steps:
+1. Run `list-archive`
+
+Expected:
+- Only archived contacts are shown.
+
+!!**Positive Test Case 2: Run with extra text**!!
+
+Steps:
+1. Run `list-archive 123`
+
+Expected:
+- Command still works and shows archived contacts.
+
+### Editing a contact : `edit`
+
+*Prerequisites:*
+- At least one contact exists in current displayed list.
+- Run `list` before each INDEX-based test case.
+- There are fewer than 999 contacts.
+- Refer to [User Guide: Editing a contact](UserGuide.md#editing-a-contact-edit) for field behavior (including tag replacement via `t/`)
+
+!!**Positive Test Case 1: Edit one field**!!
+
+Steps:
+1. Run `edit 1 p/91234567`
+
+Expected:
+- Command succeeds and phone for contact 1 is updated.
+
+!!**Positive Test Case 2: Edit multiple fields**!!
+
+Steps:
+1. Run `edit 1 e/newmail@example.com a/12-34, Sample Road #01-01`
+
+Expected:
+- Command succeeds and both fields are updated.
+
+!!**Positive Test Case 3: Clear tags using `t/`**!!
+
+Steps:
+1. Run `edit 1 t/`
+
+Expected:
+- Command succeeds and tags for contact 1 are cleared.
+
+!!**Positive Test Case 4: Clear note using `nt/`**!!
+
+Steps:
+1. Run `edit 1 nt/`
+
+Expected:
+- Command succeeds and note for contact 1 is cleared.
+
+!!**Positive Test Case 5: Clear visit date and time using `v/`**!!
+
+Steps:
+1. Run `edit 1 v/`
+
+Expected:
+- Command succeeds and visit date and time for contact 1 are cleared.
+
+!!**Positive Test Case 6: Duplicate tag values**!!
+
+Steps:
+1. Run `edit 1 t/friend t/Friend`
+
+Expected:
+- Command succeeds but only one `friend` tag is added.
+
+!!**Negative Test Case 1: No fields supplied**!!
+
+Steps:
+1. Run `edit 1`
+
+Expected:
+- Command fails with message: `At least one field to edit must be provided.`
+
+!!**Negative Test Case 2: Invalid index**!!
+
+Steps:
+1. Run `edit 999 p/91234567`
+
+Expected:
+- Command fails with message: `The contact index provided is invalid`
+
+!!**Negative Test Case 3: Invalid phone**!!
+
+Steps:
+1. Run `edit 1 p/911a`
+
+Expected:
+- Command fails with message: `Phone numbers should be at most 15 characters...`
+
+!!**Negative Test Case 4: Invalid address**!!
+
+Steps:
+1. Run `edit 1 a/Bob street/block123`
+
+Expected:
+- Command fails with message: `Addresses should not be blank, must be at most 120 characters...`
+
+### Locating contacts by specified field: `find`
+
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Locating contacts by specified field](UserGuide.md#locating-contacts-by-specified-field-find) for single-mode and prefix rules
+
+!!**Positive Test Case 1: Find by name keywords**!!
+
+Steps:
+1. Run `find n/Alex David`
+
+Expected:
+- Contacts with any part of their name starting with `Alex` or `David` (case-insensitive) are shown.
+
+!!**Positive Test Case 2: Find by tag**!!
+
+Steps:
+1. Run `find t/friends`
+
+Expected:
+- Contacts with tag(s) starting with `friends` (case-insensitive) are shown.
+
+!!**Positive Test Case 3: Find by specific date**!!
+
+Steps:
+1. Run `find d/2026-12-01`
+
+Expected:
+- Contacts with visit date on 2026-12-01 are shown.
+
+!!**Positive Test Case 4: Find by today keyword**!!
+
+Steps:
+1. Run `find d/today`
+
+Expected:
+- Contacts with visit date on today are shown.
+
+!!**Positive Test Case 5: Find by date range**!!
+
+Steps:
+1. Run `find sd/2026-01-01 ed/2026-12-31`
+
+Expected:
+- Contacts with visit dates in range are shown.
+
+!!**Negative Test Case 1: Mixed modes in one command**!!
+
+Steps:
+1. Run `find n/Alex t/friends`
+
+Expected:
+- Command fails with message: `Only one search type allowed.`
+
+!!**Negative Test Case 2: Missing date range pair**!!
+
+Steps:
+1. Run `find sd/2026-01-01`
+
+Expected:
+- Command fails with message: `Both sd/ and ed/ must be provided together.`
+
+!!**Negative Test Case 3: Invalid date range order**!!
+
+Steps:
+1. Run `find sd/2026-12-31 ed/2026-01-01`
+
+Expected:
+- Command fails with message: `Start date cannot be after end date!`
+
+### Adding note to a contact : `note`
+
+*Prerequisites:*
+- At least one contact exists in current displayed list.
+- Run `list` before each INDEX-based test case.
+- Refer to [User Guide: Adding note to a contact](UserGuide.md#adding-note-to-a-contact-note) for note semantics
+
+!!**Positive Test Case 1: Add/replace note**!!
+
+Steps:
+1. Run `note 1 nt/Requires wheelchair assistance`
+
+Expected:
+- Command succeeds and note is updated for contact 1.
+
+!!**Positive Test Case 2: Clear note**!!
+
+Steps:
+1. Run `note 1 nt/`
+
+Expected:
+- Command succeeds and note is cleared for contact 1.
+
+!!**Negative Test Case 1: Missing note prefix**!!
+
+Steps:
+1. Run `note 1`
+
+Expected:
+- Command fails with message: `Inote: Edits the note of the contact...`
+
+!!**Negative Test Case 2: Invalid index**!!
+
+Steps:
+1. Run `note -1 nt/Follow up`
+
+Expected:
+- Command fails with message: `Invalid index. Index must be a non-zero positive number (1, 2, 3...).`
+
+### Managing tags for a contact : `tag`
+
+*Prerequisites:*
+- At least one contact exists.
+- Run `list` before each INDEX-based test case.
+- Refer to [User Guide: Managing tags for a contact](UserGuide.md#managing-tags-for-a-contact-tag) for `at/` and `dt/` behavior
+
+!!**Positive Test Case 1: Add one tag**!!
+
+Steps:
+1. Run `tag 1 at/client`
+
+Expected:
+- Command succeeds and `client` tag is added.
+
+!!**Positive Test Case 2: Delete one tag**!!
+
+Steps:
+1. Ensure contact 1 has `client` tag.
+2. Run `tag 1 dt/client`
+
+Expected:
+- Command succeeds and `client` tag is removed.
+
+!!**Positive Test Case 3: Add and delete in one command**!!
+
+Steps:
+1. Ensure contact 1 has `friend` tag.
+1. Run `tag 1 at/family dt/friend`
+
+Expected:
+- Command succeeds and both tag updates are applied.
+
+!!**Positive Test Case 4: Adding duplicate tag values**!!
+
+Steps:
+1. Run `tag 1 at/friend at/Friend`
+
+Expected:
+- Command succeeds but only one `friend` tag is added.
+
+!!**Negative Test Case 1: No `at/` and `dt/` provided**!!
+
+Steps:
+1. Run `tag 1`
+
+Expected:
+- Command fails with message: `Tag to add or delete must be provided.`
+
+!!**Negative Test Case 2: Add existing tag**!!
+
+Steps:
+1. Ensure contact 1 already has `friends`
+2. Run `tag 1 at/friends`
+
+Expected:
+- Command fails with message: `The tag [friends] already exists for this person.`
+
+!!**Negative Test Case 3: Delete non-existent tag**!!
+
+Steps:
+1. Run `tag 1 dt/notpresent`
+
+Expected:
+- Command fails with message: `The tag [notpresent] does not exist, cannot be deleted.`
+
+### Deleting contact(s) : `delete`
+
+*Prerequisites:*
+- At least 5 contacts exist.
+- Run `list` before each INDEX-based test case.
+- There are fewer than 999 contacts.
+- Refer to [User Guide: Deleting contacts](UserGuide.md#deleting-contact-s-delete) for index/range syntax rules
+
+!!**Positive Test Case 1: Delete single index**!!
+
+Steps:
+1. Run `delete 2`
+
+Expected:
+- Contact at index 2 is removed.
+
+!!**Positive Test Case 2: Delete multiple indexes and range**!!
+
+Steps:
+1. Run `delete 1 3-4 5`
+
+Expected:
+- All specified contacts are deleted in one command.
+
+!!**Positive Test Case 3: Duplicate indexes are ignored**!!
+
+Steps:
+1. Run `delete 2 2 2-2`
+
+Expected:
+- Contact 2 is deleted once without errors.
+
+!!**Negative Test Case 1: Descending range**!!
+
+Steps:
+1. Run `delete 5-2`
+
+Expected:
+- Command fails with message: `Invalid range: start index must be less than or equal to end index.`
+
+!!**Negative Test Case 2: Out-of-range index in bulk delete**!!
+
+Steps:
+1. Run `delete 1 999`
+
+Expected:
+- Command fails with message: `Invalid indices: 999. Contact does not exist in current list.`
+
+!!**Negative Test Case 3: Invalid token**!!
+
+Steps:
+1. Run `delete a`
+
+Expected:
+- Command fails with message: `Invalid input. Only numbers and ranges like 1 or 3-5 are allowed.`
+
+!!**Negative Test Case 4: Range too large**!!
+
+Steps:
+1. Run `delete 1-150`
+
+Expected:
+- Command fails with message: `Range too large. A range can include at most 100 indices...`
+
+!!**Negative Test Case 5: Index specified in range is too large**!!
+
+Steps:
+1. Run `delete 19999999999-20000000000`
+
+Expected:
+- Command fails with message: `Index specified for range is too large. Please specify a smaller index.`
+
+!!**Negative Test Case 6: Invalid index**!!
+
+Steps:
+1. Run `delete -1`
+
+Expected:
+- Command fails with message: `Invalid index. Index must be a non-zero positive number (1, 2, 3...).`
+
+!!**Negative Test Case 7: Index too large**!!
+
+Steps:
+1. Run `delete 10000000000`
+
+Expected:
+- Command fails with message: `Index too large. Please specify a valid index.`
+
+### Unarchiving a contact : `unarchive`
+
+*Prerequisites:*
+- At least one archived contact exists for positive flow.
+- Run `list-archive` before each INDEX-based test case.
+- There are fewer than 999 archived contacts.
+- Refer to [User Guide: Unarchiving a contact](UserGuide.md#unarchiving-a-contact-unarchive) for command usage
+
+!!**Positive Test Case 1: Unarchive from archived list**!!
+
+Steps:
+1. Run `unarchive 1`
+
+Expected:
+- Command succeeds with `Unarchived: ...` message.
+
+!!**Negative Test Case 1: Invalid index format**!!
+
+Steps:
+1. Run `unarchive abc`
+
+Expected:
+- Command fails with message: `Invalid command format! unarchive: Unarchives the contact...`
+
+!!**Negative Test Case 2: Out-of-range index**!!
+
+Steps:
+1. Run `unarchive 999`
+
+Expected:
+- Command fails with message: `The contact index provided is invalid`
+
+### Clearing all entries : `clear`
+
+*Prerequisites:*
+- At least one contact exists.
+- Refer to [User Guide: Clearing all entries](UserGuide.md#clearing-all-entries-clear) for command usage
+
+!!**Positive Test Case 1: Clear all contacts**!!
+
+Steps:
+1. Run `clear`
+
+Expected:
+- Command succeeds with message: `Address book has been cleared!`
+- Contact list becomes empty.
+
+!!**Positive Test Case 2: Clear with extra text**!!
+
+Steps:
+1. Run `clear now`
+
+Expected:
+- Command still clears all entries (extra text is ignored).
+
+### Exiting the program : `exit`
+
+*Prerequisites:*
+- CareSync is running.
+- Refer to [User Guide: Exiting the program](UserGuide.md#exiting-the-program-exit) for command usage
+
+!!**Positive Test Case 1: Exit command**!!
+
+Steps:
+1. Run `exit`
+
+Expected:
+- CareSync closes.
+
+!!**Positive Test Case 2: Exit with extra text**!!
+
+Steps:
+1. Run `exit please`
+
+Expected:
+- CareSync closes (extra text is ignored).
+
+### Autocompleting a command
+
+*Prerequisites:*
+- CareSync command box is focused.
+- Refer to [User Guide: Autocompleting a command](UserGuide.md#autocompleting-a-command) for autocomplete rules
+
+!!**Positive Test Case 1: Autocomplete command word**!!
+
+Steps:
+1. Type `d`
+2. Press `TAB`
+
+Expected:
+- Input autocompletes to `delete`
+
+!!**Positive Test Case 2: Autocomplete prefixes**!!
+
+Steps:
+1. Type `add `
+2. Press `TAB` to insert the first prefix.
+3. Type a value for that parameter and add a trailing space.
+4. Press `TAB` again to get the next prefix.
+
+Expected:
+- Prefix suggestions are inserted in order, starting with `n/`
+
+!!**Positive Test Case 3: Autocomplete with index-required command**!!
+
+Steps:
+1. Type `edit ` and press `TAB`
+2. Type `edit 1 ` and press `TAB`
+
+Expected:
+- Step 1: no prefix suggestion is accepted.
+- Step 2: prefix suggestion is accepted (starts with `n/`).
+
+!!**Positive Test Case 4: Autocomplete stops when command becomes invalid**!!
+
+Steps:
+1. Type `find n/Alex ` and press `TAB`
+2. Type `edit 1 n/Joe x/a ` and press `TAB`
+
+Expected:
+- Step 1: no additional prefix suggestion is accepted for `find`
+- Step 2: no additional prefix suggestion is accepted because the command input is invalid.
+
+### Remembering a command
+
+*Prerequisites:*
+- CareSync command box is focused.
+- Refer to [User Guide: Remembering a command](UserGuide.md#remembering-a-command) for history behavior
+
+!!**Positive Test Case 1: Recall older commands**!!
+
+Steps:
+1. Run `list`
+2. Run `find n/Alex`
+3. Press `ARROW_UP` twice.
+
+Expected:
+- First `ARROW_UP`: command box shows `find n/Alex`
+- Second `ARROW_UP`: command box shows `list`
+
+!!**Positive Test Case 2: Navigate back down**!!
+
+Steps:
+1. After recalling older commands, press `ARROW_DOWN` until newest.
+
+Expected:
+- Command box cycles toward newer commands and finally becomes empty.
+
+!!**Positive Test Case 3: Consecutive duplicates are not duplicated in history**!!
+
+Steps:
+1. Run `list`
+2. Run `list` again.
+3. Press `ARROW_UP` once.
+
+Expected:
+- Only one `list` entry is recalled for consecutive duplicate submissions.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+Refer to [User Guide: Saving the data](UserGuide.md#saving-the-data) and [User Guide: Editing the data file](UserGuide.md#editing-the-data-file) for storage behavior details.
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+!!**Positive Test Case 1: Missing data file**!!
 
-1. _{ more test cases …​ }_
+Steps:
+1. Navigate to the `data` folder.
+2. Delete `addressbook.json` if it exists.
+3. Launch CareSync with `java -jar CareSync.jar`
+
+Expected:
+- CareSync creates a new `addressbook.json` file with the default sample data.
+
+!!**Positive Test Case 2: Corrupted data file**!!
+
+Steps:
+1. Navigate to the `data` folder.
+2. Open `addressbook.json`
+3. Modify the file such that the data file is now invalid.
+4. Save the file.
+5. Launch CareSync with `java -jar CareSync.jar`
+
+Expected:
+- CareSync discards all data and starts with an empty data file.
+
+!!**Positive Test Case 3: Data saved after commands**!!
+
+Steps:
+1. Launch CareSync with `java -jar CareSync.jar`
+2. Add, edit or delete a contact using the `add`, `edit`, `delete` commands respectively.
+3. Close CareSync.
+
+Expected:
+- Changes are saved correctly in `addressbook.json`

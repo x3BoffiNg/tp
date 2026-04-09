@@ -35,6 +35,7 @@ public class UnarchiveCommandTest {
 
     @Test
     public void execute_validIndexArchivedList_success() {
+        // BVA: valid target index at the lower boundary of the archived-person list.
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         model.archivePerson(firstPerson);
         model.updateFilteredPersonList(Person::isArchived);
@@ -50,13 +51,15 @@ public class UnarchiveCommandTest {
         expectedModel.updateFilteredPersonList(Person::isArchived);
         Person expectedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         expectedModel.unarchivePerson(expectedPerson);
-        expectedModel.updateFilteredPersonList(p -> !p.isArchived());
+        expectedModel.updateFilteredPersonList(Person::isArchived);
 
         assertCommandSuccess(unarchiveCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_multipleArchivedPersons_refreshShowsOnlyActivePersons() {
+        // EP (valid): archived-list flow with more than one archived person still refreshes to show only
+        // archived entries.
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
         model.archivePerson(firstPerson);
@@ -74,14 +77,15 @@ public class UnarchiveCommandTest {
         expectedModel.updateFilteredPersonList(Person::isArchived);
         Person expectedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         expectedModel.unarchivePerson(expectedPerson);
-        expectedModel.updateFilteredPersonList(p -> !p.isArchived());
+        expectedModel.updateFilteredPersonList(Person::isArchived);
 
         assertCommandSuccess(unarchiveCommand, model, expectedMessage, expectedModel);
-        assertFalse(model.getFilteredPersonList().stream().anyMatch(Person::isArchived));
+        assertFalse(model.getFilteredPersonList().stream().anyMatch(p -> !p.isArchived()));
     }
 
     @Test
     public void execute_invalidIndexArchivedList_throwsCommandException() {
+        // BVA: index is just beyond the archived-person list size, so the command should reject it.
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         model.archivePerson(firstPerson);
         model.updateFilteredPersonList(Person::isArchived);
@@ -94,6 +98,7 @@ public class UnarchiveCommandTest {
 
     @Test
     public void execute_personNotArchived_returnsUnsuccess() {
+        // EP (invalid): target person is not archived, so the command returns the unsuccessful message.
         // default filtered list is non-archived persons
         Person person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         UnarchiveCommand unarchiveCommand = new UnarchiveCommand(INDEX_FIRST_PERSON);

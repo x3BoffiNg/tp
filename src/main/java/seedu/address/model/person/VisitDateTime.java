@@ -5,8 +5,10 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Represents a Person's next visit date and time in the address book.
@@ -14,23 +16,27 @@ import java.util.Locale;
  */
 public class VisitDateTime {
 
-    public static final String MESSAGE_CONSTRAINTS =
-            "Visit date and time should be in the format: yyyy-MM-dd HH:mm (e.g., 2026-03-15 14:30)";
-    public static final String MESSAGE_DATE_CONSTRAINTS = "Dates must be in YYYY-MM-DD format!";
+    public static final String MESSAGE_CONSTRAINTS = "Visit date and time must be a valid date and time in the format: "
+                    + "yyyy-MM-dd HH:mm (e.g., 2026-03-15 14:30)";
+    public static final String MESSAGE_DATE_CONSTRAINTS = "Date must be a valid date in the format yyyy-MM-dd "
+                    + "(e.g., 2026-03-15) or the keyword 'today'.";
 
-    public static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static final DateTimeFormatter INPUT_FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern("uuuu-MM-dd HH:mm")
+            .toFormatter();
+    public static final DateTimeFormatter DATE_INPUT_FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern("uuuu-MM-dd")
+            .toFormatter();
     public static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a",
             Locale.US);
 
     private final LocalDateTime value;
-    private final String originalValue;
 
     /**
      * Constructs an empty {@code VisitDateTime}.
      */
     public VisitDateTime() {
         this.value = null;
-        this.originalValue = "";
     }
 
     /**
@@ -39,23 +45,39 @@ public class VisitDateTime {
      * @param visitDateTime A valid visit date and time string.
      */
     public VisitDateTime(String visitDateTime) {
+        this.value = parseVisitDateTime(visitDateTime);
+    }
+
+    /**
+     * Parses a visit date-time string and returns the normalized value.
+     */
+    public static LocalDateTime parseVisitDateTime(String visitDateTime) {
         requireNonNull(visitDateTime);
-        checkArgument(isValidVisitDateTime(visitDateTime), MESSAGE_CONSTRAINTS);
-        this.originalValue = visitDateTime.trim();
-        this.value = LocalDateTime.parse(this.originalValue, INPUT_FORMATTER);
+        String trimmedVisitDateTime = visitDateTime.trim();
+        checkArgument(!trimmedVisitDateTime.isEmpty(), MESSAGE_CONSTRAINTS);
+        try {
+            return LocalDateTime.parse(trimmedVisitDateTime, INPUT_FORMATTER);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS, e);
+        }
+    }
+
+    /**
+     * Parses a date string and returns the normalized value.
+     */
+    public static java.time.LocalDate parseDate(String date) {
+        requireNonNull(date);
+        return java.time.LocalDate.parse(date.trim(), DATE_INPUT_FORMATTER);
     }
 
     /**
      * Returns true if a given string is a valid visit date and time.
      */
     public static boolean isValidVisitDateTime(String test) {
-        if (test == null || test.trim().isEmpty()) {
-            return false;
-        }
         try {
-            LocalDateTime.parse(test.trim(), INPUT_FORMATTER);
+            parseVisitDateTime(test);
             return true;
-        } catch (DateTimeParseException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             return false;
         }
     }
@@ -103,18 +125,12 @@ public class VisitDateTime {
             return false;
         }
         VisitDateTime otherVisitDateTime = (VisitDateTime) other;
-        if (value == null && otherVisitDateTime.value == null) {
-            return true;
-        }
-        if (value == null || otherVisitDateTime.value == null) {
-            return false;
-        }
-        return value.equals(otherVisitDateTime.value);
+        return Objects.equals(value, otherVisitDateTime.value);
     }
 
     @Override
     public int hashCode() {
-        return value == null ? 0 : value.hashCode();
+        return Objects.hashCode(value);
     }
 }
 

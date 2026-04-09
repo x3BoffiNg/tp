@@ -14,32 +14,34 @@ public class Messages {
 
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
-    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
+    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The contact index provided is invalid";
+    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d contact(s) listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
-                "Multiple values specified for the following single-valued field(s): ";
-
-    // Custom Errors for Bulk Delete
-    public static final String MESSAGE_EMPTY_INPUT =
-            "No indices provided.";
-
-    public static final String MESSAGE_INVALID_TOKEN =
-            "Invalid input. Only numbers and ranges like 1 or 3-5 are allowed.";
-
+            "Multiple values provided for the same field. Each field should only be specified once: ";
     public static final String MESSAGE_INVALID_INDEX =
             "Invalid index. Index must be a non-zero positive number (1, 2, 3...).";
+    public static final String MESSAGE_INDEX_TOO_LARGE =
+            "Index too large. Please specify a valid index.";
+
+    // Custom Errors for Bulk Delete
+    public static final String MESSAGE_INVALID_TOKEN =
+            "Invalid input. Only numbers and ranges like 1 or 3-5 are allowed.";
 
     public static final String MESSAGE_INVALID_RANGE =
             "Invalid range. Start index must be less than or equal to end index.";
 
-    public static final String MESSAGE_RANGE_TOO_LARGE =
-            "Range too large. Please specify a smaller range.";
+    public static final String MESSAGE_RANGE_INDEX_LARGE =
+            "Index specified for range is too large. Please specify a smaller index.";
 
-    public static final String MESSAGE_INDEX_TOO_LARGE =
-            "Index too large. Please specify a valid index.";
+    public static final String MESSAGE_RANGE_TOO_LARGE =
+            "Range too large. A range can include at most 100 indices (inclusive of both start and end).";
 
     public static final String MESSAGE_NONEXISTENCE_INDEX =
-            "Invalid indices: %1$s.\nPerson does not exist in current list.";
+            "Invalid indices: %1$s.\nContact does not exist in current list.";
+
+    // Message for invalid sort field (List command)
+    public static final String MESSAGE_INVALID_SORT_FIELD =
+            "Invalid sort field. Valid options are: name, visit";
 
 
     /**

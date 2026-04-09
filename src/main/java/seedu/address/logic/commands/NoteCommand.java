@@ -21,15 +21,15 @@ public class NoteCommand extends Command {
 
     public static final String COMMAND_WORD = "note";
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Edits the note of the person identified "
-            + "by the index number used in the last person listing.\n"
+            + ": Edits the note of the contact identified "
+            + "by the index number used in the displayed contact list.\n"
             + "Existing note will be overwritten by the input.\n"
             + "To remove an existing note, provide an empty note value.\n"
             + "Parameters: INDEX (must be a positive integer) " + PREFIX_NOTE + "[NOTE]\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_NOTE + "To help apply for financial aid\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_NOTE;
-    public static final String MESSAGE_ADD_NOTE_SUCCESS = "Added note to Person: %1$s";
-    public static final String MESSAGE_DELETE_NOTE_SUCCESS = "Removed note from Person: %1$s";
+    public static final String MESSAGE_ADD_NOTE_SUCCESS = "Added note to Contact: %1$s";
+    public static final String MESSAGE_DELETE_NOTE_SUCCESS = "Removed note from Contact: %1$s";
     private final Index index;
     private final Note note;
 
