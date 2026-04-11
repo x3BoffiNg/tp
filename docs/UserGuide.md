@@ -110,7 +110,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 17.0.17+8-LTS-360, mixed mode, sharing)
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/client`, `t/client t/caseid1` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `n/NAME p/PHONE`, `p/PHONE n/NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list-archive`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -138,11 +138,12 @@ Examples:
 
 Adds a contact to CareSync.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​`
+Format: `add n/NAME p/PHONE e/EMAIL a/ADDRESS [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​`
 
 * `n/`, `p/`, `e/`, and `a/` are **compulsory** and must each appear **exactly once**.
 * `nt/` and `v/` are **optional** and can each appear at most once.
-* You cannot add a contact whose name already exists in CareSync.
+* You cannot add a contact whose name already exists in CareSync (case-sensitive).
+* You cannot add a contact whose `VISIT_DATE_TIME` is in the past.
 
 <box type="tip" seamless>
 
@@ -178,6 +179,7 @@ Optionally, the list can be **sorted by a specified field**.
 Format: `list [s/FIELD]`
 
 * If no sorting field is provided, all contacts are listed in their default order (i.e. the original stored order of contacts).
+  * `list s/` (empty `FIELD`) can also be used to list the default order.
 * If a sorting field is provided, the list will be sorted according to the specified field.
 * Valid fields:
   * `name` - sorts contacts alphabetically by name
@@ -193,7 +195,7 @@ Format: `list [s/FIELD]`
 
 <box type="warning">
 
-**Sorting is persistent.** Once a sort is applied, it will be sorted by that specified field until a new `list` command is entered.
+**Sorting is persistent.** Once a sort is applied, it will be sorted by that specified field until a new `list` command is entered or until CareSync closes.
 </box>
 
 Examples:
@@ -226,12 +228,14 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [nt/NOTE] [v/VISIT_
 
 * Edits the contact at the specified `INDEX`.
 * **At least one of the optional fields** must be provided.
+* You cannot edit a contact to have a `VISIT_DATE_TIME` in the past.
 * Existing values will be updated to the input values.
-* Use `v/` with no value to clear the contact's visit date and time.
-* Use `nt/` with no value to clear the contact's note.
 * When editing tags, the **existing tags of the contact will be removed** i.e adding of tags is not cumulative.
-* You can remove all the contact's tags by typing `t/` without
-    specifying any tags after it.
+
+<box type="tip" seamless>
+
+**Tip:** Use `v/`, `nt/` or `t/` without specifying anything to clear their respective fields!
+</box>
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
@@ -473,7 +477,6 @@ Furthermore, certain edits can cause the CareSync to behave in unexpected ways (
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -482,11 +485,11 @@ Furthermore, certain edits can cause the CareSync to behave in unexpected ways (
 Action     | Format                                                                    | Examples
 -----------|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------
 **Help**   | `help` | `help`
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​` <br> | `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00`
+**Add**    | `add n/NAME p/PHONE e/EMAIL a/ADDRESS [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​` <br> | `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 nt/Needs financial support v/2026-12-01 14:00`
 **Archive**| `archive INDEX`<br> | `archive 1`
 **List**   | `list [s/FIELD]`<br> | `list`<br>`list s/name`<br>`list s/visit`
 **List Archive** | `list-archive` | `list-archive`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​`<br> | `edit 1 p/91234567 e/johndoe@example.com`<br> `edit 2 nt/ t/` *(clears note and tag)*<br> `edit 3 v/` *(clears visit date and time)*
+**Edit**   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​`<br> | `edit 1 p/91234567 e/johndoe@example.com`<br> `edit 2 nt/ t/` *(clears note and tag)*<br> `edit 3 v/` *(clears visit date and time)*
 **Find**   | `find n/KEYWORD [MORE_KEYWORDS]…`<br>`find t/TAG`<br>`find d/DATE`<br>`find sd/START_DATE ed/END_DATE`<br> | `find n/James Jake`<br>`find t/caseid1`<br>`find d/today`<br>`find sd/2026-01-01 ed/2026-04-30`<br>
 **Note**   | `note INDEX nt/NOTE`<br> | `note 1 nt/Requires wheelchair assistance`<br>`note 2 nt/` *(clears note)*
 **Tag**    | `tag INDEX [at/TAG_TO_ADD]…​ [dt/TAG_TO_DELETE]…​`<br> | `tag 1 at/client dt/caseid1`
@@ -501,6 +504,10 @@ Action     | Format                                                             
 <box type="info" seamless>
 
 **Alphanumeric characters** include all lower and upper case letters and numbers only!
+
+**Additional Info:**
+- Parameter fields will be trimmed (i.e. whitespaces (` `) at the start and end will be removed)
+- Empty paramters used in `edit` and `note` will attempt to clear the respective field
 </box>
 
 - **INDEX**: Refers to the index number shown in the displayed contact list.
@@ -509,10 +516,13 @@ Action     | Format                                                             
 - **n/NAME**: Refers to the name of the contact.
   - The 1st character **must be an alphanumeric character**
   - Can only contain alphanumeric characters and whitespaces (` `)
+  - **No contacts** can have the same `NAME` (case-sensitive)
   - Max length: 80<br><br>
-- **p/PHONE_NUMBER**: Refers to the phone number of the contact.
+- **p/PHONE**: Refers to the phone number of the contact.
+  - The 1st character **must be a numeric character or `+`**
   - Can only contain numeric characters, whitespaces (` `) and certain special characters (`+-`)
   - Must contain at least one numeric character.
+  - Min length: 3
   - Max length: 15<br><br>
 - **e/EMAIL**: Refers to the email address of the contact.
   - `local@domain` pattern
