@@ -322,7 +322,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user           | reuse past commands                                        | execute commands faster                                | ✓           |
 | `* *`    | user           | autocomplete commands                                      | execute commands faster                                | ✓           |
 | `* *`    | user           | undo commands                                              | undo any wrong changes                                 | ✗           |
-| `* *`    | user           | archive contacts                                           | hide irrelavant contacts without deleting them         | ✓           |
+| `* *`    | user           | archive contacts                                           | hide irrelevant contacts without deleting them         | ✓           |
 | `* *`    | user           | list archived contacts                                     | view hidden contacts                                   | ✓           |
 | `* *`    | user           | unarchive contacts                                         | restore hidden contacts to the main contact list       | ✓           |
 | `* *`    | expert user    | add aliases to commands                                    | execute commands faster                                | ✗           |
