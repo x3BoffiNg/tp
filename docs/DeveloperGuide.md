@@ -301,41 +301,40 @@ details as well as allow them to easily track upcoming visits with the various f
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                    | So that I can…​                                           |
-|----------|--------------------------------------------|---------------------------------|-----------------------------------------------------------|
-| `* * *` | user | add a contact with basic details | quickly identify who is being visited |
-| `* * *` | user | delete a contact | remove contacts that are no longer needed |
-| `* * *` | user | store an address with each contact | know where to go for home visits |
-| `* * *` | user | set a visit date | know when to go for home visits |
-| `* * *` | user | see visit date and time clearly | manage daily schedule effectively |
-| `* * *` | user | add tags to differentiate clients and services | retrieve relevant contact details quickly |
-| `* * *` | user | add tags to differentiate case ID / client groups | retrieve relevant contact details quickly |
-| `* * *` | user | filter contacts based on tags | quickly view related contacts based on tag |
-| `* * *` | user | search for a name | reference contacts clearly |
-| `* *` | user | see upcoming visits alongside past ones | plan follow-ups effectively |
-| `* *` | user | have a clean and simple layout | find information quickly between visits |
-| `* *` | user | sort contacts by name or ID | find contacts easily |
-| `* *` | user | mark a contact’s status (e.g. stable, urgent) | prioritise my work |
-| `* *` | user | add a visit note to a contact | remember the purpose of the visit |
-| `* *` | user | pin contacts | identify important contacts easily |
-| `* *` | user | reuse past commands | execute commands faster |
-| `* *` | user | autocomplete commands | execute commands faster |
-| `* *` | user | undo commands | undo any wrong changes |
-| `* *` | user | archive contacts | hide irrelevant contacts without deleting them |
-| `* *` | user | list archived contacts | view hidden contacts |
-| `* *` | user | unarchive contacts | restore hidden contacts to the main contact list |
-| `* *` | expert user | add aliases to commands | execute commands faster |
-| `* *` | new user | see sample commands | know valid command formats |
-| `*` | expert user | combine commands | execute commands efficiently |
-| `*` | user | add a specific visit location | quickly reference where the visit takes place |
-| `*` | user | set visit type (e.g. consultation, remote) | understand the nature of the visit |
-| `*` | user | specify the visit duration | plan my time realistically |
-| `*` | user | view completed visits | understand my visit history |
-| `*` | user | mark a visit as planned, completed, or cancelled | track visit status and outcomes |
-| `*` | user | be sure that visit records remain unchanged | be held accountable for the visit |
-| `*` | new user | view a list of common commands when opening the app | refer to instructions without using an external manual |
-| `*` | new user | transfer my contact details from my phone’s contact list to CareSync | transition to using CareSync easily |
+**Legend:** ✓ = fully implemented; ✗ = not implemented or partially implemented
 
+| Priority | As a …​        | I want to …​                                               | So that I can…​                                        | Implemented |
+|----------|----------------|------------------------------------------------------------|--------------------------------------------------------|-------------|
+| `* * *`  | user           | add a contact with basic details                           | quickly identify who is being visited                  | ✓           |
+| `* * *`  | user           | delete a contact                                           | remove contacts that are no longer needed              | ✓           |
+| `* * *`  | user           | store an address with each contact                         | know where to go for home visits                       | ✓           |
+| `* * *`  | user           | set a visit date                                           | know when to go for home visits                        | ✓           |
+| `* * *`  | user           | see visit date and time clearly                            | manage daily schedule effectively                      | ✓           |
+| `* * *`  | user           | add tags to differentiate clients and services             | retrieve relevant contact details quickly              | ✓           |
+| `* * *`  | user           | add tags to differentiate case ID / client groups          | retrieve relevant contact details quickly              | ✓           |
+| `* * *`  | user           | filter contacts based on tags                              | quickly view related contacts based on tag             | ✓           |
+| `* * *`  | user           | search for a name                                          | reference contacts clearly                             | ✓           |
+| `* *`    | user           | see upcoming visits alongside past ones                    | plan follow-ups effectively                            | ✗           | 
+| `* *`    | user           | have a clean and simple layout                             | find information quickly between visits                | ✓           |
+| `* *`    | user           | sort contacts by name or visit date                        | find contacts easily                                   | ✓           |
+| `* *`    | user           | mark a contact’s status (e.g. stable, urgent)              | prioritise my work                                     | ✗           |
+| `* *`    | user           | add a visit note to a contact                              | remember the purpose of the visit                      | ✓           |
+| `* *`    | user           | pin contacts                                               | identify important contacts easily                     | ✗           |
+| `* *`    | user           | reuse past commands                                        | execute commands faster                                | ✓           |
+| `* *`    | user           | autocomplete commands                                      | execute commands faster                                | ✓           |
+| `* *`    | user           | undo commands                                              | undo any wrong changes                                 | ✗           |
+| `* *`    | user           | archive contacts                                           | hide irrelevant contacts without deleting them         | ✓           |
+| `* *`    | user           | list archived contacts                                     | view hidden contacts                                   | ✓           |
+| `* *`    | user           | unarchive contacts                                         | restore hidden contacts to the main contact list       | ✓           |
+| `* *`    | expert user    | add aliases to commands                                    | execute commands faster                                | ✗           |
+| `* *`    | new user       | view a list of common commands when opening the app        | refer to instructions without using an external manual | ✓           |
+| `*`      | expert user    | combine commands                                           | execute commands efficiently                           | ✗           |
+| `*`      | user           | set visit type (e.g. consultation, remote)                 | understand the nature of the vist                      | ✗           |
+| `*`      | user           | specify the visit duration                                 | plan my time realistically                             | ✗           |
+| `*`      | user           | view completed visits                                      | understand my visit history                            | ✗           |
+| `*`      | user           | mark a visit as planned, completed, or cancelled           | track visit status and outcomes                        | ✗           |
+| `*`      | user           | be sure that visit records remain unchanged                | be held accountable for the visit                      | ✗           |
+| `*`      | returning user | import contact details from an existing CareSync JSON file | continue using CareSync seamlessly                     | ✓           |
 
 *{More may be added in the future}*
 
@@ -1505,6 +1504,16 @@ Steps:
 
 Expected:
 - Changes are saved correctly in `addressbook.json`
+
+--------------------------------------------------------------------------------------------------------------------
+## **Appendix: Planned Enhancement**
+Team Size: 5
+
+6. **Allow contacts with identical names but different details:** Currently, the application does not allow multiple contacts with the same name even if their other details differ. To better reflect real-world cases where people can have identical names, we plan to allow multiple contacts with the same name as long as other identifying fields (e.g., phone number, address) are different.
+7. **Improve response command box usability:** Currently, the response text box requires horizontal scrolling to view long messages and is too small, making it difficult for users to read outputs without excessive scrolling. We plan to modify the UI so that the text box wraps text and supports vertical scrolling, as well as increase its size to display more content at once for better readability.
+8. **Enable sorting in archived contact list:** Currently, users are unable to sort contacts in the archived list. We plan to add sorting functionality (e.g. by name and visit date) to the archived contacts list to improve usability and navigation. For example, users can enter `list-archive s/name` to view archived contacts sorted by name or `list-archive s/visit` to view archived contacts sorted by visit date.
+9. **Allow text selection in help window:** Currently, users are unable to select or copy text from the help window. We plan to enable text selection so that users can copy commands or instructions easily for reference.
+10. **Support bulk archive and unarchive of contacts:** Currently, users can only archive or unarchive contacts individually. We plan to allow users to perform bulk archive and unarchive actions on multiple contacts in a single command to improve efficiency. For example, users can enter `archive 1 3-5 8` to archive multiple contacts at once or `unarchive 1 4 6` to unarchive multiple contacts at once.
 
 --------------------------------------------------------------------------------------------------------------------
 
