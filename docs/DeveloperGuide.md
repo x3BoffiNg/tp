@@ -20,6 +20,7 @@
 - JUnit5 - testing framework: https://github.com/junit-team/junit5
 - MarkBind - for website generation: https://markbind.org
 - PlantUML - for diagram creation: https://plantuml.com
+- GitHub Copilot - for autocompleting code, drafting code snippets and troubleshooting/debugging
 
 --------------------------------------------------------------------------------------------------------------------
 
