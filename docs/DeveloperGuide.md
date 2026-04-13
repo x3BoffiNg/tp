@@ -1149,7 +1149,7 @@ Steps:
 1. Run `note 1`
 
 Expected:
-- Command fails with message: `note: Edits the note of the contact...`
+- Command fails with message: `Invalid command format! note: Edits the note of the contact...`
 
 !!**Negative Test Case 2: Invalid index**!!
 
