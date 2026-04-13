@@ -243,7 +243,7 @@ The following activity diagram summarizes what happens when a user executes the 
 
 **Note:** If the command returns an error (for example invalid index), no data is modified.
 
-**Note:** After successful command execution, Logic persists the current address book through `Storage`.
+**Note:** After successful command execution, `Logic` persists the current address book through `Storage`.
 
 </box>
 
